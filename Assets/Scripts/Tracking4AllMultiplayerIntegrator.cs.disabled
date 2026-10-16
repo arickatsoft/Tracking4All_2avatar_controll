@@ -1,0 +1,320 @@
+using UnityEngine;
+using Tracking4All;
+using Tracking4All.Multiplayer;
+
+namespace Tracking4All
+{
+    /// <summary>
+    /// Corrected multiplayer integration using proper Tracking4All Avatar/Puppet system
+    /// This fixes the issue where avatars move to wrong positions instead of animating properly
+    /// </summary>
+    public class Tracking4AllMultiplayerIntegrator : MonoBehaviour
+    {
+        [Header("Tracking4All Components")]
+        [SerializeField] private Tracking4AllNetworkLogger networkLogger;
+        [SerializeField] private PoseSolution poseSolution;
+        
+        [Header("Network Joint Providers")]
+        [SerializeField] private NetworkPoseJointProvider bryceNetworkProvider;
+        [SerializeField] private NetworkPoseJointProvider remyNetworkProvider;
+        
+        [Header("Avatar Components")]
+        [SerializeField] private Avatar bryceAvatar;
+        [SerializeField] private Avatar remyAvatar;
+        
+        [Header("Integration Settings")]
+        [SerializeField] private bool autoSetupOnStart = true;
+        [SerializeField] private bool debugMode = true;
+        
+        void Start()
+        {
+            if (autoSetupOnStart)
+            {
+                SetupTracking4AllMultiplayer();
+            }
+        }
+        
+        /// <summary>
+        /// Sets up the proper Tracking4All multiplayer system
+        /// </summary>
+        [ContextMenu("Setup Tracking4All Multiplayer")]
+        public void SetupTracking4AllMultiplayer()
+        {
+            Debug.Log("🚀 SETTING UP TRACKING4ALL MULTIPLAYER SYSTEM");
+            
+            // Find components if not assigned
+            AutoFindComponents();
+            
+            // Create network joint providers if needed
+            SetupNetworkJointProviders();
+            
+            // Connect to multiplayer buttons
+            ConnectToMultiplayerUI();
+            
+            Debug.Log("✅ Tracking4All multiplayer setup complete!");
+        }
+        
+        void AutoFindComponents()
+        {
+            // Find network logger
+            if (networkLogger == null)
+                networkLogger = FindObjectOfType<Tracking4AllNetworkLogger>();
+                
+            // Find pose solution
+            if (poseSolution == null)
+                poseSolution = FindObjectOfType<PoseSolution>();
+                
+            // Find avatars
+            if (bryceAvatar == null)
+            {
+                GameObject bryceGO = GameObject.Find("Bryce");
+                if (bryceGO != null)
+                    bryceAvatar = bryceGO.GetComponent<Avatar>();
+            }
+            
+            if (remyAvatar == null)
+            {
+                GameObject remyGO = GameObject.Find("Remy");
+                if (remyGO != null)
+                    remyAvatar = remyGO.GetComponent<Avatar>();
+            }
+            
+            if (debugMode)
+            {
+                Debug.Log($"Components Found:");
+                Debug.Log($"  NetworkLogger: {(networkLogger != null ? "✅" : "❌")}");
+                Debug.Log($"  PoseSolution: {(poseSolution != null ? "✅" : "❌")}");
+                Debug.Log($"  Bryce Avatar: {(bryceAvatar != null ? "✅" : "❌")}");
+                Debug.Log($"  Remy Avatar: {(remyAvatar != null ? "✅" : "❌")}");
+            }
+        }
+        
+        void SetupNetworkJointProviders()
+        {
+            // Create network joint providers for receiving network data
+            if (bryceNetworkProvider == null)
+            {
+                GameObject bryceProviderGO = new GameObject("BryceNetworkProvider");
+                bryceNetworkProvider = bryceProviderGO.AddComponent<NetworkPoseJointProvider>();
+                Debug.Log("✅ Created Bryce network joint provider");
+            }
+            
+            if (remyNetworkProvider == null)
+            {
+                GameObject remyProviderGO = new GameObject("RemyNetworkProvider");
+                remyNetworkProvider = remyProviderGO.AddComponent<NetworkPoseJointProvider>();
+                Debug.Log("✅ Created Remy network joint provider");
+            }
+        }
+        
+        void ConnectToMultiplayerUI()
+        {
+            // Find existing multiplayer UI and connect
+            MultiplayerGameUI gameUI = FindObjectOfType<MultiplayerGameUI>();
+            
+            if (gameUI != null)
+            {
+                // Hook into button events using reflection
+                var uiType = typeof(MultiplayerGameUI);
+                var hostButtonField = uiType.GetField("hostGameButton", 
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                var joinButtonField = uiType.GetField("joinGameButton", 
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                    
+                if (hostButtonField != null)
+                {
+                    var hostButton = hostButtonField.GetValue(gameUI) as UnityEngine.UI.Button;
+                    if (hostButton != null)
+                    {
+                        hostButton.onClick.AddListener(OnHostButtonClicked);
+                        Debug.Log("✅ Connected to Host button");
+                    }
+                }
+                
+                if (joinButtonField != null)
+                {
+                    var joinButton = joinButtonField.GetValue(gameUI) as UnityEngine.UI.Button;
+                    if (joinButton != null)
+                    {
+                        joinButton.onClick.AddListener(OnJoinButtonClicked);
+                        Debug.Log("✅ Connected to Join button");
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogWarning("MultiplayerGameUI not found");
+            }
+        }
+        
+        /// <summary>
+        /// Called when Host button is clicked - sets up proper Tracking4All host mode
+        /// </summary>
+        public void OnHostButtonClicked()
+        {
+            Debug.Log("🎮 HOST MODE - TRACKING4ALL STYLE");
+            
+            // In host mode:
+            // - Remy is controlled by LOCAL camera (pose solution)
+            // - Bryce receives NETWORK data (network joint provider)
+            
+            SetupHostMode();
+            
+            if (networkLogger != null)
+            {
+                networkLogger.SetAsHost();
+            }
+        }
+        
+        /// <summary>
+        /// Called when Join button is clicked - sets up proper Tracking4All client mode
+        /// </summary>
+        public void OnJoinButtonClicked()
+        {
+            Debug.Log("🎮 CLIENT MODE - TRACKING4ALL STYLE");
+            
+            // In client mode:
+            // - Bryce is controlled by LOCAL camera (pose solution)
+            // - Remy receives NETWORK data (network joint provider)
+            
+            SetupClientMode();
+            
+            if (networkLogger != null)
+            {
+                networkLogger.SetAsClient();
+            }
+        }
+        
+        void SetupHostMode()
+        {
+            Debug.Log("⚙️ Setting up HOST mode avatar control:");
+            
+            // HOST: Remy = Local camera, Bryce = Network data
+            if (remyAvatar != null && poseSolution != null)
+            {
+                // Connect Remy to local pose solution (camera input)
+                remyAvatar.ResetAvatar(poseSolution as IPoseJointProvider<PoseJoints>);
+                Debug.Log("📷 Remy connected to LOCAL camera input");
+            }
+            
+            if (bryceAvatar != null && bryceNetworkProvider != null)
+            {
+                // Connect Bryce to network joint provider (remote data)
+                bryceAvatar.ResetAvatar(bryceNetworkProvider);
+                Debug.Log("🌐 Bryce connected to NETWORK data input");
+            }
+            
+            Debug.Log("✅ HOST mode setup complete");
+            Debug.Log("   📷 Your camera controls Remy");
+            Debug.Log("   🌐 Network data controls Bryce");
+        }
+        
+        void SetupClientMode()
+        {
+            Debug.Log("⚙️ Setting up CLIENT mode avatar control:");
+            
+            // CLIENT: Bryce = Local camera, Remy = Network data
+            if (bryceAvatar != null && poseSolution != null)
+            {
+                // Connect Bryce to local pose solution (camera input)
+                bryceAvatar.ResetAvatar(poseSolution as IPoseJointProvider<PoseJoints>);
+                Debug.Log("📷 Bryce connected to LOCAL camera input");
+            }
+            
+            if (remyAvatar != null && remyNetworkProvider != null)
+            {
+                // Connect Remy to network joint provider (remote data)
+                remyAvatar.ResetAvatar(remyNetworkProvider);
+                Debug.Log("🌐 Remy connected to NETWORK data input");
+            }
+            
+            Debug.Log("✅ CLIENT mode setup complete");
+            Debug.Log("   📷 Your camera controls Bryce");
+            Debug.Log("   🌐 Network data controls Remy");
+        }
+        
+        /// <summary>
+        /// Apply network data received from the other device
+        /// This is called by the real networking system
+        /// </summary>
+        public void OnNetworkDataReceived(string jsonData, bool isHost)
+        {
+            try
+            {
+                var networkFrame = JsonUtility.FromJson<Tracking4AllNetworkLogger.Tracking4AllNetworkFrame>(jsonData);
+                
+                if (networkFrame != null && networkFrame.landmarks != null)
+                {
+                    Debug.Log($"📥 Received network data: {networkFrame.landmarks.Length} landmarks");
+                    
+                    // Apply to correct network provider based on role
+                    if (isHost && bryceNetworkProvider != null)
+                    {
+                        // Host receives data for Bryce
+                        bryceNetworkProvider.SetNetworkLandmarkData(networkFrame.landmarks);
+                        Debug.Log("✅ Applied network data to Bryce");
+                    }
+                    else if (!isHost && remyNetworkProvider != null)
+                    {
+                        // Client receives data for Remy
+                        remyNetworkProvider.SetNetworkLandmarkData(networkFrame.landmarks);
+                        Debug.Log("✅ Applied network data to Remy");
+                    }
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Failed to apply network data: {e.Message}");
+            }
+        }
+        
+        /// <summary>
+        /// Test the complete system with sample data
+        /// </summary>
+        [ContextMenu("Test Complete System")]
+        public void TestCompleteSystem()
+        {
+            Debug.Log("🧪 TESTING COMPLETE TRACKING4ALL MULTIPLAYER SYSTEM");
+            
+            // Test host mode
+            OnHostButtonClicked();
+            
+            // Wait a frame, then test network data
+            StartCoroutine(TestNetworkDataAfterDelay());
+        }
+        
+        System.Collections.IEnumerator TestNetworkDataAfterDelay()
+        {
+            yield return new WaitForSeconds(1f);
+            
+            // Create sample network data
+            var testFrame = new Tracking4AllNetworkLogger.Tracking4AllNetworkFrame
+            {
+                avatarName = "BRYCE",
+                timestamp = Time.time,
+                landmarks = new Tracking4AllNetworkLogger.LandmarkNetworkData[]
+                {
+                    new Tracking4AllNetworkLogger.LandmarkNetworkData
+                    {
+                        landmarkIndex = 15, // Left wrist
+                        position = new Vector3(-0.5f, 1.2f, 0.3f),
+                        visibility = 0.9f,
+                        presence = 1.0f
+                    },
+                    new Tracking4AllNetworkLogger.LandmarkNetworkData
+                    {
+                        landmarkIndex = 16, // Right wrist
+                        position = new Vector3(0.5f, 1.5f, 0.2f), // Raised right hand
+                        visibility = 0.9f,
+                        presence = 1.0f
+                    }
+                }
+            };
+            
+            string testJson = JsonUtility.ToJson(testFrame);
+            OnNetworkDataReceived(testJson, true); // Test as host
+            
+            Debug.Log("✅ Complete system test finished - check Bryce for movement!");
+        }
+    }
+}

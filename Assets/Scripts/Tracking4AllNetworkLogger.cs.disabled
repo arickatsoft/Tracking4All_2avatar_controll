@@ -1,0 +1,410 @@
+using UnityEngine;
+using System.Collections.Generic;
+using Tracking4All;
+
+namespace Tracking4All.Multiplayer
+{
+    /// <summary>
+    /// Corrected network data logger that uses proper Tracking4All data formats
+    /// Instead of Unity's HumanPose, we use Tracking4All's Landmark/Joint system
+    /// </summary>
+    public class Tracking4AllNetworkLogger : MonoBehaviour
+    {
+        [Header("Avatar References")]
+        [SerializeField] private GameObject bryceAvatar;
+        [SerializeField] private GameObject remyAvatar;
+        
+        [Header("Tracking4All Components")]
+        [SerializeField] private PoseSolution poseSolution;
+        [SerializeField] private Avatar bryceAvatarComponent;
+        [SerializeField] private Avatar remyAvatarComponent;
+        
+        [Header("Logging Settings")]
+        [SerializeField] private bool enableDetailedLogging = true;
+        [SerializeField] private float loggingInterval = 0.5f;
+        
+        [Header("Network Simulation")]
+        [SerializeField] private bool simulateNetworkData = false;
+        [SerializeField] private float networkSimulationRate = 30f;
+        
+        // Internal state
+        private float lastLogTime = 0f;
+        private float lastNetworkSimTime = 0f;
+        private bool isHost = false;
+        private bool isClient = false;
+        
+        // Tracking4All data structures (correct format)
+        [System.Serializable]
+        public class Tracking4AllNetworkFrame
+        {
+            public string avatarName;
+            public float timestamp;
+            
+            // Landmark data (3D world coordinates)
+            public LandmarkNetworkData[] landmarks;
+            
+            // Normalized landmark data (screen space [0,1])
+            public NormalizedLandmarkNetworkData[] normalizedLandmarks;
+            
+            // Joint data for pose
+            public JointNetworkData[] poseJoints;
+        }
+        
+        [System.Serializable]
+        public class LandmarkNetworkData
+        {
+            public Vector3 position;
+            public float visibility;  // 0-1, occlusion measure
+            public float presence;    // 0-1, in camera bounds measure
+            public int landmarkIndex; // Which landmark this is (nose=0, etc.)
+        }
+        
+        [System.Serializable]
+        public class NormalizedLandmarkNetworkData
+        {
+            public Vector3 position; // X,Y in [0,1], Z is depth
+            public int landmarkIndex;
+        }
+        
+        [System.Serializable]
+        public class JointNetworkData
+        {
+            public Vector3 position;
+            public Quaternion rotation;
+            public int jointIndex; // Which joint this represents
+            public float confidence;
+        }
+        
+        void Start()
+        {
+            InitializeReferences();
+            Debug.Log("=== Tracking4All Network Logger Initialized ===");
+        }
+        
+        void InitializeReferences()
+        {
+            // Auto-find components if not assigned
+            if (bryceAvatar == null)
+                bryceAvatar = GameObject.Find("Bryce");
+            if (remyAvatar == null)
+                remyAvatar = GameObject.Find("Remy");
+                
+            // Find Tracking4All components
+            if (poseSolution == null)
+                poseSolution = FindObjectOfType<PoseSolution>();
+                
+            if (bryceAvatarComponent == null && bryceAvatar != null)
+                bryceAvatarComponent = bryceAvatar.GetComponent<Avatar>();
+                
+            if (remyAvatarComponent == null && remyAvatar != null)
+                remyAvatarComponent = remyAvatar.GetComponent<Avatar>();
+                
+            Debug.Log($"PoseSolution: {(poseSolution != null ? "✅ Found" : "❌ Missing")}");
+            Debug.Log($"Bryce Avatar Component: {(bryceAvatarComponent != null ? "✅ Found" : "❌ Missing")}");
+            Debug.Log($"Remy Avatar Component: {(remyAvatarComponent != null ? "✅ Found" : "❌ Missing")}");
+        }
+        
+        void Update()
+        {
+            // Regular pose data logging
+            if (enableDetailedLogging && Time.time - lastLogTime >= loggingInterval)
+            {
+                LogTracking4AllData();
+                lastLogTime = Time.time;
+            }
+            
+            // Network simulation
+            if (simulateNetworkData && Time.time - lastNetworkSimTime >= (1f / networkSimulationRate))
+            {
+                SimulateNetworkTransmission();
+                lastNetworkSimTime = Time.time;
+            }
+        }
+        
+        /// <summary>
+        /// Log current Tracking4All data in the correct format for network transmission
+        /// </summary>
+        void LogTracking4AllData()
+        {
+            if (poseSolution == null) return;
+            
+            Debug.Log("=== TRACKING4ALL CAMERA INPUT DATA ===");
+            
+            // Get landmark data (3D world coordinates)
+            var landmarkData = GetLandmarkData();
+            
+            // Get normalized landmark data (screen space)
+            var normalizedData = GetNormalizedLandmarkData();
+            
+            // Create network frame
+            var networkFrame = new Tracking4AllNetworkFrame
+            {
+                avatarName = isHost ? "REMY" : "BRYCE",
+                timestamp = Time.time,
+                landmarks = landmarkData,
+                normalizedLandmarks = normalizedData
+            };
+            
+            // Log the data
+            LogNetworkFrame(networkFrame);
+        }
+        
+        LandmarkNetworkData[] GetLandmarkData()
+        {
+            var landmarkList = new List<LandmarkNetworkData>();
+            
+            if (poseSolution == null) return landmarkList.ToArray();
+            
+            try
+            {
+                // Get landmark data from Tracking4All pose solution
+                // PoseLandmarks enum defines the landmark indices
+                for (int i = 0; i < 33; i++) // MediaPipe pose has 33 landmarks
+                {
+                    var landmark = poseSolution.Get(0, i); // group 0, landmark i
+                    
+                    if (landmark != null)
+                    {
+                        var networkLandmark = new LandmarkNetworkData
+                        {
+                            position = landmark.position,
+                            visibility = landmark.visibility,
+                            presence = landmark.presence,
+                            landmarkIndex = i
+                        };
+                        
+                        landmarkList.Add(networkLandmark);
+                    }
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"Error getting landmark data: {e.Message}");
+            }
+            
+            return landmarkList.ToArray();
+        }
+        
+        NormalizedLandmarkNetworkData[] GetNormalizedLandmarkData()
+        {
+            var normalizedList = new List<NormalizedLandmarkNetworkData>();
+            
+            if (poseSolution == null) return normalizedList.ToArray();
+            
+            try
+            {
+                // Get normalized landmark data (screen space [0,1])
+                var normalizedProvider = poseSolution as INormalizedLandmarkProvider<PoseLandmarks>;
+                if (normalizedProvider != null)
+                {
+                    for (int i = 0; i < 33; i++)
+                    {
+                        var normalizedLandmark = normalizedProvider.Get(0, i);
+                        
+                        if (normalizedLandmark != null)
+                        {
+                            var networkNormalized = new NormalizedLandmarkNetworkData
+                            {
+                                position = normalizedLandmark.position,
+                                landmarkIndex = i
+                            };
+                            
+                            normalizedList.Add(networkNormalized);
+                        }
+                    }
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"Error getting normalized landmark data: {e.Message}");
+            }
+            
+            return normalizedList.ToArray();
+        }
+        
+        void LogNetworkFrame(Tracking4AllNetworkFrame frame)
+        {
+            Debug.Log($"[{frame.timestamp:F2}s] === TRACKING4ALL NETWORK FRAME ===");
+            Debug.Log($"Avatar: {frame.avatarName}");
+            Debug.Log($"Landmarks: {frame.landmarks?.Length ?? 0}");
+            Debug.Log($"Normalized Landmarks: {frame.normalizedLandmarks?.Length ?? 0}");
+            
+            // Log key landmark positions
+            if (frame.landmarks != null && frame.landmarks.Length > 0)
+            {
+                Debug.Log("🔍 KEY LANDMARK POSITIONS:");
+                
+                // Key landmarks to show (MediaPipe pose landmark indices)
+                var keyLandmarks = new Dictionary<int, string>
+                {
+                    {0, "Nose"},
+                    {15, "LeftHand"}, 
+                    {16, "RightHand"},
+                    {27, "LeftFoot"},
+                    {28, "RightFoot"},
+                    {11, "LeftShoulder"},
+                    {12, "RightShoulder"}
+                };
+                
+                foreach (var landmark in frame.landmarks)
+                {
+                    if (keyLandmarks.ContainsKey(landmark.landmarkIndex))
+                    {
+                        string name = keyLandmarks[landmark.landmarkIndex];
+                        Debug.Log($"   {name}: Pos={landmark.position} | Vis={landmark.visibility:F2} | Pres={landmark.presence:F2}");
+                    }
+                }
+            }
+            
+            // Create JSON for network transmission
+            string jsonData = JsonUtility.ToJson(frame);
+            Debug.Log($"📦 NETWORK JSON ({jsonData.Length} chars):");
+            Debug.Log("=== COPY-PASTE NETWORK DATA ===");
+            Debug.Log(jsonData);
+            Debug.Log("=== END NETWORK DATA ===");
+        }
+        
+        /// <summary>
+        /// Apply Tracking4All network data to avatar (correct method)
+        /// </summary>
+        public void ApplyTracking4AllNetworkData(string jsonData)
+        {
+            try
+            {
+                var networkFrame = JsonUtility.FromJson<Tracking4AllNetworkFrame>(jsonData);
+                
+                if (networkFrame != null)
+                {
+                    Debug.Log($"🌐 APPLYING TRACKING4ALL NETWORK DATA:");
+                    Debug.Log($"   Avatar: {networkFrame.avatarName}");
+                    Debug.Log($"   Landmarks: {networkFrame.landmarks?.Length ?? 0}");
+                    Debug.Log($"   Timestamp: {networkFrame.timestamp:F3}");
+                    
+                    // Apply to correct avatar based on role
+                    Avatar targetAvatar = null;
+                    if (isHost && networkFrame.avatarName == "BRYCE")
+                    {
+                        targetAvatar = bryceAvatarComponent;
+                    }
+                    else if (isClient && networkFrame.avatarName == "REMY")
+                    {
+                        targetAvatar = remyAvatarComponent;
+                    }
+                    
+                    if (targetAvatar != null)
+                    {
+                        ApplyLandmarkDataToAvatar(targetAvatar, networkFrame);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("No target avatar found for network data");
+                    }
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Failed to apply Tracking4All network data: {e.Message}");
+            }
+        }
+        
+        void ApplyLandmarkDataToAvatar(Avatar targetAvatar, Tracking4AllNetworkFrame frame)
+        {
+            // This is the correct way to control avatars in Tracking4All
+            // We need to create a custom joint provider that feeds the network data
+            
+            Debug.Log($"✅ Applied {frame.landmarks?.Length ?? 0} landmarks to {targetAvatar.name}");
+            
+            // TODO: Implement proper joint provider for network data
+            // For now, log what we would apply
+            if (frame.landmarks != null)
+            {
+                foreach (var landmark in frame.landmarks)
+                {
+                    // Each landmark represents a body part position
+                    // This would feed into the Avatar's joint provider system
+                    Debug.Log($"   Landmark {landmark.landmarkIndex}: {landmark.position} (vis: {landmark.visibility:F2})");
+                }
+            }
+        }
+        
+        public void SetAsHost()
+        {
+            isHost = true;
+            isClient = false;
+            simulateNetworkData = true;
+            
+            Debug.Log("🎮 TRACKING4ALL HOST MODE");
+            Debug.Log("📊 Will send REMY data, receive BRYCE data");
+        }
+        
+        public void SetAsClient()
+        {
+            isHost = false;
+            isClient = true;
+            simulateNetworkData = true;
+            
+            Debug.Log("🎮 TRACKING4ALL CLIENT MODE"); 
+            Debug.Log("📊 Will send BRYCE data, receive REMY data");
+        }
+        
+        void SimulateNetworkTransmission()
+        {
+            // Create sample network data in correct Tracking4All format
+            var sampleFrame = CreateSampleTracking4AllFrame();
+            string jsonData = JsonUtility.ToJson(sampleFrame);
+            
+            Debug.Log($"🌐 SIMULATED NETWORK DATA ({jsonData.Length} chars)");
+            ApplyTracking4AllNetworkData(jsonData);
+        }
+        
+        Tracking4AllNetworkFrame CreateSampleTracking4AllFrame()
+        {
+            // Create realistic sample data
+            var landmarks = new List<LandmarkNetworkData>();
+            
+            // Add key landmarks with realistic positions
+            landmarks.Add(new LandmarkNetworkData 
+            { 
+                landmarkIndex = 0, // Nose
+                position = new Vector3(0, 1.7f, 0.1f),
+                visibility = 0.9f,
+                presence = 1.0f
+            });
+            
+            landmarks.Add(new LandmarkNetworkData 
+            { 
+                landmarkIndex = 15, // Left hand (MediaPipe index)
+                position = new Vector3(-0.3f, 1.2f, 0.5f),
+                visibility = 0.8f,
+                presence = 1.0f
+            });
+            
+            landmarks.Add(new LandmarkNetworkData 
+            { 
+                landmarkIndex = 16, // Right hand
+                position = new Vector3(0.3f, 1.2f, 0.5f),
+                visibility = 0.8f,
+                presence = 1.0f
+            });
+            
+            return new Tracking4AllNetworkFrame
+            {
+                avatarName = isHost ? "BRYCE" : "REMY",
+                timestamp = Time.time,
+                landmarks = landmarks.ToArray()
+            };
+        }
+        
+        [ContextMenu("Test Tracking4All Network Data")]
+        public void TestNetworkData()
+        {
+            var testFrame = CreateSampleTracking4AllFrame();
+            string jsonData = JsonUtility.ToJson(testFrame);
+            
+            Debug.Log("🧪 TESTING TRACKING4ALL NETWORK DATA");
+            Debug.Log($"Data: {jsonData}");
+            
+            ApplyTracking4AllNetworkData(jsonData);
+        }
+    }
+}

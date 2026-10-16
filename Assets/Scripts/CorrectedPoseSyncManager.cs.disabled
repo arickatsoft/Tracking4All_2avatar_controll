@@ -1,0 +1,344 @@
+using UnityEngine;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
+using System.Collections.Generic;
+using System;
+
+namespace Tracking4All.Multiplayer
+{
+    /// <summary>
+    /// Updated PoseSyncManager that sends proper Tracking4All data instead of HumanPose data
+    /// This fixes the avatar movement issues by sending landmark data instead of muscle data
+    /// </summary>
+    public class CorrectedPoseSyncManager : MonoBehaviour
+    {
+        [Header("Sync Settings")]
+        [SerializeField] private int poseDataPort = 7778;
+        [SerializeField] private float sendRate = 30f;
+        
+        [Header("Avatar References")]
+        [SerializeField] private GameObject localAvatar;
+        [SerializeField] private GameObject remoteAvatar;
+        
+        [Header("Tracking4All References")]
+        [SerializeField] private PoseSolution poseSolution;
+        
+        // Network state
+        private bool isHost = false;
+        private bool isConnected = false;
+        private string remoteIP = "";
+        
+        // UDP communication
+        private UdpClient udpSender;
+        private UdpClient udpReceiver;
+        private Thread receiveThread;
+        private IPEndPoint remoteEndPoint;
+        
+        // Timing
+        private float lastSendTime = 0f;
+        private float sendInterval;
+        
+        [System.Serializable]
+        public class CorrectedNetworkFrame
+        {
+            public string avatarName;
+            public float timestamp;
+            public LandmarkData[] landmarks;
+        }
+        
+        [System.Serializable]
+        public class LandmarkData
+        {
+            public Vector3 position;
+            public float visibility;
+            public float presence;
+            public int landmarkIndex;
+        }
+        
+        void Start()
+        {
+            sendInterval = 1f / sendRate;
+            
+            // Find PoseSolution if not assigned
+            if (poseSolution == null)
+                poseSolution = FindObjectOfType<PoseSolution>();
+                
+            Debug.Log($"CorrectedPoseSyncManager initialized. PoseSolution: {(poseSolution != null ? "Found" : "Missing")}");
+        }
+        
+        public void InitializeAsHost(GameObject localAvatarRemy, GameObject remoteAvatarBryce)
+        {
+            isHost = true;
+            localAvatar = localAvatarRemy;
+            remoteAvatar = remoteAvatarBryce;
+            
+            Debug.Log("📡 CORRECTED PoseSync: HOST - Sending REMY landmarks, receiving BRYCE landmarks");
+            
+            StartUDPReceiver();
+        }
+        
+        public void InitializeAsClient(GameObject localAvatarBryce, GameObject remoteAvatarRemy, string hostIP)
+        {
+            isHost = false;
+            localAvatar = localAvatarBryce;
+            remoteAvatar = remoteAvatarRemy;
+            remoteIP = hostIP;
+            
+            Debug.Log($"📡 CORRECTED PoseSync: CLIENT - Sending BRYCE landmarks, receiving REMY landmarks");
+            
+            StartUDPReceiver();
+            ConnectToHost(hostIP);
+        }
+        
+        void StartUDPReceiver()
+        {
+            try
+            {
+                udpReceiver = new UdpClient(poseDataPort);
+                receiveThread = new Thread(ReceivePoseData);
+                receiveThread.Start();
+                
+                Debug.Log($"📡 Corrected UDP receiver started on port {poseDataPort}");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to start UDP receiver: {e.Message}");
+            }
+        }
+        
+        void ConnectToHost(string hostIP)
+        {
+            try
+            {
+                remoteIP = hostIP;
+                remoteEndPoint = new IPEndPoint(IPAddress.Parse(hostIP), poseDataPort);
+                
+                udpSender = new UdpClient();
+                isConnected = true;
+                
+                Debug.Log($"📡 Connected to host at {hostIP}:{poseDataPort}");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to connect to host: {e.Message}");
+            }
+        }
+        
+        void Update()
+        {
+            if (!isConnected) return;
+            
+            // Send pose data at specified rate
+            if (Time.time - lastSendTime >= sendInterval)
+            {
+                SendLandmarkData();
+                lastSendTime = Time.time;
+            }
+        }
+        
+        /// <summary>
+        /// Send landmark data (CORRECT format) instead of HumanPose data
+        /// </summary>
+        void SendLandmarkData()
+        {
+            if (poseSolution == null || udpSender == null) return;
+            
+            try
+            {
+                // Get landmark data from Tracking4All (CORRECT way)
+                var landmarks = GetCurrentLandmarks();
+                
+                if (landmarks.Length > 0)
+                {
+                    // Create network frame with landmark data
+                    var networkFrame = new CorrectedNetworkFrame
+                    {
+                        avatarName = localAvatar != null ? localAvatar.name.ToUpper() : "UNKNOWN",
+                        timestamp = Time.time,
+                        landmarks = landmarks
+                    };
+                    
+                    // Serialize and send
+                    string jsonData = JsonUtility.ToJson(networkFrame);
+                    byte[] data = Encoding.UTF8.GetBytes(jsonData);
+                    
+                    // Send to remote device
+                    if (isHost && !string.IsNullOrEmpty(remoteIP))
+                    {
+                        IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Parse(remoteIP), poseDataPort);
+                        udpSender.Send(data, data.Length, clientEndPoint);
+                    }
+                    else if (!isHost && remoteEndPoint != null)
+                    {
+                        udpSender.Send(data, data.Length, remoteEndPoint);
+                    }
+                    
+                    Debug.Log($"📤 CORRECTED DATA SENT: {networkFrame.avatarName} - {landmarks.Length} landmarks ({data.Length} bytes)");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to send landmark data: {e.Message}");
+            }
+        }
+        
+        /// <summary>
+        /// Get current landmarks from Tracking4All PoseSolution (CORRECT method)
+        /// </summary>
+        LandmarkData[] GetCurrentLandmarks()
+        {
+            var landmarkList = new List<LandmarkData>();
+            
+            if (poseSolution == null) return landmarkList.ToArray();
+            
+            try
+            {
+                // Get landmark data from PoseSolution (this is the correct Tracking4All way)
+                for (int i = 0; i < 33; i++) // MediaPipe pose has 33 landmarks
+                {
+                    try
+                    {
+                        var landmark = poseSolution.Get(0, i); // group 0, landmark i
+                        
+                        if (landmark.position != Vector3.zero) // Only send non-zero landmarks
+                        {
+                            var landmarkData = new LandmarkData
+                            {
+                                position = landmark.position,
+                                visibility = landmark.visibility,
+                                presence = landmark.presence,
+                                landmarkIndex = i
+                            };
+                            
+                            landmarkList.Add(landmarkData);
+                        }
+                    }
+                    catch
+                    {
+                        // Skip landmarks that can't be read
+                        continue;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"Error getting landmarks: {e.Message}");
+            }
+            
+            return landmarkList.ToArray();
+        }
+        
+        void ReceivePoseData()
+        {
+            IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, poseDataPort);
+            
+            while (udpReceiver != null)
+            {
+                try
+                {
+                    byte[] data = udpReceiver.Receive(ref remoteEndPoint);
+                    string jsonData = Encoding.UTF8.GetString(data);
+                    
+                    var networkFrame = JsonUtility.FromJson<CorrectedNetworkFrame>(jsonData);
+                    
+                    if (networkFrame != null && networkFrame.landmarks != null)
+                    {
+                        // Store sender IP for response
+                        string senderIP = remoteEndPoint.Address.ToString();
+                        if (isHost && string.IsNullOrEmpty(remoteIP))
+                        {
+                            remoteIP = senderIP;
+                            
+                            if (udpSender == null)
+                            {
+                                udpSender = new UdpClient();
+                                isConnected = true;
+                            }
+                        }
+                        
+                        Debug.Log($"📥 CORRECTED DATA RECEIVED: {networkFrame.avatarName} - {networkFrame.landmarks.Length} landmarks from {senderIP}");
+                        
+                        // Apply the corrected landmark data to avatar
+                        ApplyCorrectedLandmarkData(networkFrame);
+                    }
+                }
+                catch (Exception e)
+                {
+                    if (udpReceiver != null)
+                    {
+                        Debug.LogError($"Receive corrected data error: {e.Message}");
+                    }
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Apply corrected landmark data to avatar (PROPER method)
+        /// </summary>
+        void ApplyCorrectedLandmarkData(CorrectedNetworkFrame frame)
+        {
+            if (frame.landmarks == null || frame.landmarks.Length == 0) return;
+            
+            Debug.Log($"🎯 APPLYING CORRECTED DATA to remote avatar:");
+            Debug.Log($"   Avatar: {frame.avatarName}");
+            Debug.Log($"   Landmarks: {frame.landmarks.Length}");
+            Debug.Log($"   Timestamp: {frame.timestamp:F3}");
+            
+            // Find the correct component to handle this
+            var simpleMultiplayer = FindObjectOfType<SimpleTracking4AllMultiplayer>();
+            if (simpleMultiplayer != null)
+            {
+                string networkData = JsonUtility.ToJson(frame);
+                simpleMultiplayer.OnNetworkDataReceived(networkData, isHost);
+            }
+            
+            // TODO: Apply landmark data to avatar using proper Tracking4All method
+            // This should move the avatar correctly instead of to wrong positions
+        }
+        
+        public void OnPlayerConnected(string playerIP)
+        {
+            remoteIP = playerIP;
+            
+            if (udpSender == null)
+            {
+                udpSender = new UdpClient();
+            }
+            
+            isConnected = true;
+            Debug.Log($"📡 Corrected PoseSync: Player connected from {playerIP}");
+        }
+        
+        public void Disconnect()
+        {
+            isConnected = false;
+            
+            if (receiveThread != null)
+            {
+                receiveThread.Abort();
+                receiveThread = null;
+            }
+            
+            if (udpReceiver != null)
+            {
+                udpReceiver.Close();
+                udpReceiver = null;
+            }
+            
+            if (udpSender != null)
+            {
+                udpSender.Close();
+                udpSender = null;
+            }
+            
+            Debug.Log("📡 Corrected PoseSync: Disconnected");
+        }
+        
+        void OnDestroy()
+        {
+            Disconnect();
+        }
+    }
+}

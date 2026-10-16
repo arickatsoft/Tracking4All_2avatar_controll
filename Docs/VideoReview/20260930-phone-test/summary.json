@@ -1,0 +1,102 @@
+{
+  "version": "punch-assist-3-outward-intent",
+  "device": "samsung SM-S928B",
+  "engine": "RTMPose",
+  "logSha256": "4a337c1ecd9f472b07738e552d44a94409569446c85f94c4313bcd465590a743",
+  "videoSha256": "6478ff21728276407c7a724b8f27ea40506e38f395fecc43dde9d69b14aed876",
+  "t0": 107.13219464959731,
+  "duration": 74.99248971103223,
+  "observations": 703,
+  "poses": 3148,
+  "initialHits": 6,
+  "finalHits": 29,
+  "newHits": 23,
+  "newActions": 28,
+  "committedActions": 25,
+  "cancelledActions": 3,
+  "independentObservationsPerSecond": 9.374272046559094,
+  "renderPosesPerSecond": 41.97753684575822,
+  "medianObservationIntervalMs": 100.43838497949764,
+  "firstObservationRelative": 3.016587811987847,
+  "medianCameraAvailabilityToResultMs": 99.43744802149013,
+  "p95CameraAvailabilityToResultMs": 110.13718805043027,
+  "medianPreparationToCommitMs": 100.12661496875808,
+  "medianCommitToHitMs": 91.16322896443307,
+  "medianCandidateCameraAvailabilityToHitMs": 297.1067699836567,
+  "p95RenderedPoseIntervalMs": 64.07255202066153,
+  "renderIntervalsOver50ms": 597,
+  "validLeftObservations": 699,
+  "validRightObservations": 701,
+  "blockedObservations": 76,
+  "commitmentsBySide": {
+    "left": 11,
+    "right": 14
+  },
+  "endMarker": {
+    "kind": "end",
+    "droppedRecords": 0
+  },
+  "blocks": [
+    {
+      "start": 3.016587811987847,
+      "lastBlocked": 3.732934113999363,
+      "nextUnblocked": 3.816987550992053
+    },
+    {
+      "start": 8.879085935011972,
+      "lastBlocked": 9.078434580005705,
+      "nextUnblocked": 9.18719833000796
+    },
+    {
+      "start": 26.208459053013925,
+      "lastBlocked": 26.393164626031634,
+      "nextUnblocked": 26.48991113598457
+    },
+    {
+      "start": 32.74941504001616,
+      "lastBlocked": 33.17844795598647,
+      "nextUnblocked": 33.30419358098878
+    },
+    {
+      "start": 41.07516123499953,
+      "lastBlocked": 41.56965722399762,
+      "nextUnblocked": 41.66796873498241
+    },
+    {
+      "start": 41.97007540101184,
+      "lastBlocked": 42.185796285979436,
+      "nextUnblocked": 42.267642380029415
+    },
+    {
+      "start": 44.49905029602813,
+      "lastBlocked": 44.59954175399615,
+      "nextUnblocked": 44.716271546029006
+    },
+    {
+      "start": 44.832913421036196,
+      "lastBlocked": 44.93504232697886,
+      "nextUnblocked": 45.03691977501147
+    },
+    {
+      "start": 49.99528326303697,
+      "lastBlocked": 50.29230284603544,
+      "nextUnblocked": 50.40367315802722
+    },
+    {
+      "start": 51.1955491999979,
+      "lastBlocked": 51.393308366008554,
+      "nextUnblocked": 51.49510237702633
+    },
+    {
+      "start": 55.538394719013,
+      "lastBlocked": 55.74051242700078,
+      "nextUnblocked": 55.83238305198027
+    },
+    {
+      "start": 67.22082747501553,
+      "lastBlocked": 70.53496294200885,
+      "nextUnblocked": 70.64129080699057
+    }
+  ],
+  "caveat": "Camera availability is not exposure time; no physical motion-to-photon latency or overall recognition accuracy is established."
+}

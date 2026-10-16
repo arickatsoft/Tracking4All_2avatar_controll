@@ -1,0 +1,236 @@
+using UnityEngine;
+using System.Collections.Generic;
+using Tracking4All;
+
+namespace Tracking4All.Multiplayer
+{
+    /// <summary>
+    /// Network Joint Provider that feeds network data into Tracking4All's Avatar system
+    /// This is the correct way to control avatars remotely according to the documentation
+    /// </summary>
+    public class NetworkPoseJointProvider : MonoBehaviour, IPoseJointProvider<PoseJoints>
+    {
+        [Header("Network Data")]
+        [SerializeField] private bool hasNetworkData = false;
+        [SerializeField] private float dataTimeout = 2f; // Seconds without data = timeout
+        
+        // Network data storage
+        private Dictionary<PoseJoints, PoseJoint> currentJoints = new Dictionary<PoseJoints, PoseJoint>();
+        private float lastDataTime = 0f;
+        
+        // Provider lifecycle
+        private ProviderLifecycle lifecycle;
+        
+        // Provider interface implementation
+        public IProviderLifecycle Lifecycle => lifecycle;
+        public int GroupSize => 1;
+        public int DataCount => System.Enum.GetValues(typeof(PoseJoints)).Length;
+        
+        void Awake()
+        {
+            lifecycle = new ProviderLifecycle();
+            InitializeJoints();
+        }
+        
+        void Start()
+        {
+            // Signal ready
+            lifecycle.Ready();
+            Debug.Log("🔗 NetworkPoseJointProvider ready for network data");
+        }
+        
+        void Update()
+        {
+            // Check for data timeout
+            if (hasNetworkData && Time.time - lastDataTime > dataTimeout)
+            {
+                hasNetworkData = false;
+                lifecycle.TimedOut();
+                Debug.Log("⏰ Network data timed out");
+            }
+        }
+        
+        void InitializeJoints()
+        {
+            // Initialize all pose joints with default values
+            foreach (PoseJoints joint in System.Enum.GetValues(typeof(PoseJoints)))
+            {
+                currentJoints[joint] = new PoseJoint
+                {
+                    position = Vector3.zero,
+                    rotation = Quaternion.identity,
+                    confidence = 0f
+                };
+            }
+        }
+        
+        /// <summary>
+        /// Feed network landmark data into the joint provider
+        /// This converts Tracking4All landmarks to pose joints
+        /// </summary>
+        public void SetNetworkLandmarkData(Tracking4AllNetworkLogger.LandmarkNetworkData[] landmarks)
+        {
+            if (landmarks == null || landmarks.Length == 0) return;
+            
+            Debug.Log($"🌐 Received {landmarks.Length} network landmarks");
+            
+            // Convert MediaPipe landmarks to Tracking4All pose joints
+            foreach (var landmark in landmarks)
+            {
+                var poseJoint = ConvertLandmarkToPoseJoint(landmark);
+                if (poseJoint.HasValue)
+                {
+                    currentJoints[poseJoint.Value.Key] = poseJoint.Value.Value;
+                }
+            }
+            
+            // Update provider state
+            hasNetworkData = true;
+            lastDataTime = Time.time;
+            
+            // Notify listeners of update
+            lifecycle.Updated();
+            
+            Debug.Log($"✅ Applied network data to pose joints");
+        }
+        
+        /// <summary>
+        /// Convert MediaPipe landmark indices to Tracking4All pose joints
+        /// Based on MediaPipe pose landmark model
+        /// </summary>
+        System.Collections.Generic.KeyValuePair<PoseJoints, PoseJoint>? ConvertLandmarkToPoseJoint(
+            Tracking4AllNetworkLogger.LandmarkNetworkData landmark)
+        {
+            PoseJoints? jointType = null;
+            
+            // Map MediaPipe landmark indices to Tracking4All pose joints
+            switch (landmark.landmarkIndex)
+            {
+                case 0:  jointType = PoseJoints.Nose; break;
+                case 2:  jointType = PoseJoints.LeftEye; break;
+                case 5:  jointType = PoseJoints.RightEye; break;
+                case 7:  jointType = PoseJoints.LeftEar; break;
+                case 8:  jointType = PoseJoints.RightEar; break;
+                case 9:  jointType = PoseJoints.MouthLeft; break;
+                case 10: jointType = PoseJoints.MouthRight; break;
+                case 11: jointType = PoseJoints.LeftShoulder; break;
+                case 12: jointType = PoseJoints.RightShoulder; break;
+                case 13: jointType = PoseJoints.LeftElbow; break;
+                case 14: jointType = PoseJoints.RightElbow; break;
+                case 15: jointType = PoseJoints.LeftWrist; break;
+                case 16: jointType = PoseJoints.RightWrist; break;
+                case 17: jointType = PoseJoints.LeftPinky; break;
+                case 18: jointType = PoseJoints.RightPinky; break;
+                case 19: jointType = PoseJoints.LeftIndex; break;
+                case 20: jointType = PoseJoints.RightIndex; break;
+                case 21: jointType = PoseJoints.LeftThumb; break;
+                case 22: jointType = PoseJoints.RightThumb; break;
+                case 23: jointType = PoseJoints.LeftHip; break;
+                case 24: jointType = PoseJoints.RightHip; break;
+                case 25: jointType = PoseJoints.LeftKnee; break;
+                case 26: jointType = PoseJoints.RightKnee; break;
+                case 27: jointType = PoseJoints.LeftAnkle; break;
+                case 28: jointType = PoseJoints.RightAnkle; break;
+                case 29: jointType = PoseJoints.LeftHeel; break;
+                case 30: jointType = PoseJoints.RightHeel; break;
+                case 31: jointType = PoseJoints.LeftFootIndex; break;
+                case 32: jointType = PoseJoints.RightFootIndex; break;
+                
+                default:
+                    // Unknown landmark index
+                    return null;
+            }
+            
+            if (!jointType.HasValue) return null;
+            
+            // Create pose joint from landmark data
+            var poseJoint = new PoseJoint
+            {
+                position = landmark.position,
+                rotation = Quaternion.identity, // Calculate from position relationships
+                confidence = landmark.visibility * landmark.presence // Combine visibility and presence
+            };
+            
+            return new System.Collections.Generic.KeyValuePair<PoseJoints, PoseJoint>(jointType.Value, poseJoint);
+        }
+        
+        // IPoseJointProvider implementation
+        public PoseJoint Get(int group, PoseJoints index)
+        {
+            if (group != 0) return new PoseJoint(); // Only support group 0
+            
+            if (currentJoints.ContainsKey(index))
+            {
+                return currentJoints[index];
+            }
+            
+            return new PoseJoint(); // Default empty joint
+        }
+        
+        public PoseJoint Get(int group, int index)
+        {
+            if (group != 0) return new PoseJoint();
+            
+            // Convert int index to PoseJoints enum
+            var poseJoints = System.Enum.GetValues(typeof(PoseJoints));
+            if (index >= 0 && index < poseJoints.Length)
+            {
+                var jointType = (PoseJoints)poseJoints.GetValue(index);
+                return Get(group, jointType);
+            }
+            
+            return new PoseJoint();
+        }
+        
+        /// <summary>
+        /// Test method to validate the joint provider
+        /// </summary>
+        [ContextMenu("Test Network Joint Provider")]
+        public void TestNetworkJointProvider()
+        {
+            Debug.Log("🧪 Testing Network Joint Provider");
+            
+            // Create sample landmark data
+            var testLandmarks = new Tracking4AllNetworkLogger.LandmarkNetworkData[]
+            {
+                new Tracking4AllNetworkLogger.LandmarkNetworkData
+                {
+                    landmarkIndex = 0, // Nose
+                    position = new Vector3(0, 1.7f, 0),
+                    visibility = 1.0f,
+                    presence = 1.0f
+                },
+                new Tracking4AllNetworkLogger.LandmarkNetworkData
+                {
+                    landmarkIndex = 15, // Left wrist
+                    position = new Vector3(-0.5f, 1.2f, 0.3f),
+                    visibility = 0.9f,
+                    presence = 1.0f
+                },
+                new Tracking4AllNetworkLogger.LandmarkNetworkData
+                {
+                    landmarkIndex = 16, // Right wrist
+                    position = new Vector3(0.5f, 1.2f, 0.3f),
+                    visibility = 0.9f,
+                    presence = 1.0f
+                }
+            };
+            
+            // Apply test data
+            SetNetworkLandmarkData(testLandmarks);
+            
+            // Verify data was set
+            var noseJoint = Get(0, PoseJoints.Nose);
+            var leftWristJoint = Get(0, PoseJoints.LeftWrist);
+            
+            Debug.Log($"Nose Joint: {noseJoint.position} (confidence: {noseJoint.confidence})");
+            Debug.Log($"Left Wrist: {leftWristJoint.position} (confidence: {leftWristJoint.confidence})");
+            Debug.Log("✅ Network Joint Provider test completed");
+        }
+        
+        void OnDestroy()
+        {
+            lifecycle?.Dispose();
+        }
+    }
+}

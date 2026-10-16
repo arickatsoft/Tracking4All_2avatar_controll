@@ -1,0 +1,446 @@
+body {"recordingRelativeEqualsVideoTimePlus": 1.3, "offsetPrecisionSeconds": 0.15, "duration": 239.99842871102737, "observations": 2367, "poses": 10028, "end": {"kind": "end", "droppedRecords": 0}, "newHits": 8, "initialHits": 0, "finalHits": 8, "availabilityToReceivedMs": {"min": 59.40052098594606, "median": 99.62171904044226, "p95": 108.35031204624102, "max": 120.7179690245539}, "observationIntervalMs": {"min": 63.25817701872438, "median": 100.65789052168839, "p95": 117.37307300791144, "max": 749.7801560093649}, "finalPoseIntervalMs": {"min": 3.922759962733835, "median": 15.648228989448398, "p95": 63.01067705499008, "max": 85.73765598703176}, "poseOwners": {"DirectTracking": 10028}, "videoExclusions": [{"start": 142, "end": 152, "reason": "User performed incorrect left knee movement; exclude from accuracy judgments."}], "committedActions": 0, "cancelledActions": 0}
+punch {"recordingRelativeEqualsVideoTimePlus": -5.5, "offsetPrecisionSeconds": 0.15, "duration": 74.99526757601416, "observations": 733, "poses": 3132, "end": {"kind": "end", "droppedRecords": 0}, "newHits": 19, "initialHits": 8, "finalHits": 27, "availabilityToReceivedMs": {"min": 62.17635399661958, "median": 99.51015596743673, "p95": 109.6855720388703, "max": 118.7094789929688}, "observationIntervalMs": {"min": 64.2090099863708, "median": 100.98294299677946, "p95": 116.68036394985393, "max": 150.37312504136935}, "finalPoseIntervalMs": {"min": 4.034427984151989, "median": 15.639062039554119, "p95": 63.82307200692594, "max": 87.07213494926691}, "poseOwners": {"AssistedPunch": 3132}, "videoExclusions": [], "committedActions": 23, "cancelledActions": 4}
+actions [
+  {
+    "action": 1,
+    "side": 0,
+    "start": 21.998632700007875,
+    "startVideo": 27.498632700007875,
+    "commit": null,
+    "hit": null,
+    "hitsBefore": 8,
+    "sequence": 2863,
+    "maxPhase": 0.11999999731779099,
+    "contactReasons": [],
+    "minimumGap": null
+  },
+  {
+    "action": 2,
+    "side": 0,
+    "start": 23.547502022003755,
+    "startVideo": 29.047502022003755,
+    "commit": 23.628884573990945,
+    "hit": 23.697104522027075,
+    "hitsBefore": 8,
+    "sequence": 2878,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "No surface contact",
+      "Accepted hit"
+    ],
+    "minimumGap": 0.05461854860186577
+  },
+  {
+    "action": 3,
+    "side": 0,
+    "start": 25.197305980022065,
+    "startVideo": 30.697305980022065,
+    "commit": 25.295846501016058,
+    "hit": 25.385882074013352,
+    "hitsBefore": 9,
+    "sequence": 2896,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "No surface contact",
+      "Accepted hit"
+    ],
+    "minimumGap": 0.00010808075603563339
+  },
+  {
+    "action": 4,
+    "side": 0,
+    "start": 26.530788792006206,
+    "startVideo": 32.030788792006206,
+    "commit": 26.629221291979775,
+    "hit": null,
+    "hitsBefore": 10,
+    "sequence": 2909,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "No surface contact",
+      "Moving away from bag",
+      "Limb not rearmed"
+    ],
+    "minimumGap": 0.014982383698225021
+  },
+  {
+    "action": 5,
+    "side": 0,
+    "start": 28.53077603102429,
+    "startVideo": 34.03077603102429,
+    "commit": 28.62712493701838,
+    "hit": 28.71463326999219,
+    "hitsBefore": 10,
+    "sequence": 2930,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "No surface contact",
+      "Accepted hit"
+    ],
+    "minimumGap": 0.053694743663072586
+  },
+  {
+    "action": 6,
+    "side": 0,
+    "start": 29.68937050900422,
+    "startVideo": 35.18937050900422,
+    "commit": 29.774699572008103,
+    "hit": 29.860327019996475,
+    "hitsBefore": 11,
+    "sequence": 2943,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "No surface contact",
+      "Accepted hit"
+    ],
+    "minimumGap": 0.0
+  },
+  {
+    "action": 7,
+    "side": 0,
+    "start": 30.856523686030414,
+    "startVideo": 36.356523686030414,
+    "commit": 30.93799097801093,
+    "hit": 31.050387748982757,
+    "hitsBefore": 12,
+    "sequence": 2956,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "No surface contact",
+      "Accepted hit"
+    ],
+    "minimumGap": 0.030307279899716377
+  },
+  {
+    "action": 8,
+    "side": 0,
+    "start": 32.212471549981274,
+    "startVideo": 37.712471549981274,
+    "commit": 32.30847535200883,
+    "hit": 32.39203363301931,
+    "hitsBefore": 13,
+    "sequence": 2969,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "No surface contact",
+      "Accepted hit"
+    ],
+    "minimumGap": 0.007822929881513119
+  },
+  {
+    "action": 9,
+    "side": 0,
+    "start": 33.671408944996074,
+    "startVideo": 39.171408944996074,
+    "commit": 33.76943436200963,
+    "hit": null,
+    "hitsBefore": 14,
+    "sequence": 2983,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "No surface contact",
+      "Moving away from bag",
+      "Limb not rearmed"
+    ],
+    "minimumGap": 0.0
+  },
+  {
+    "action": 10,
+    "side": 1,
+    "start": 39.9619601930026,
+    "startVideo": 45.4619601930026,
+    "commit": 40.05916712002363,
+    "hit": 40.15889139100909,
+    "hitsBefore": 14,
+    "sequence": 3042,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "No surface contact",
+      "Accepted hit"
+    ],
+    "minimumGap": 0.016196057200431824
+  },
+  {
+    "action": 11,
+    "side": 1,
+    "start": 41.56272310897475,
+    "startVideo": 47.06272310897475,
+    "commit": 41.657584307016805,
+    "hit": 41.758458578027785,
+    "hitsBefore": 15,
+    "sequence": 3058,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "No surface contact",
+      "Accepted hit"
+    ],
+    "minimumGap": 0.0
+  },
+  {
+    "action": 12,
+    "side": 1,
+    "start": 44.64199373300653,
+    "startVideo": 50.14199373300653,
+    "commit": null,
+    "hit": null,
+    "hitsBefore": 16,
+    "sequence": 3088,
+    "maxPhase": 0.049572255462408066,
+    "contactReasons": [],
+    "minimumGap": null
+  },
+  {
+    "action": 13,
+    "side": 1,
+    "start": 46.18791909702122,
+    "startVideo": 51.68791909702122,
+    "commit": 46.296225399011746,
+    "hit": 46.37992487801239,
+    "hitsBefore": 16,
+    "sequence": 3103,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "Accepted hit"
+    ],
+    "minimumGap": 0.047934118658304214
+  },
+  {
+    "action": 14,
+    "side": 1,
+    "start": 48.598788888019044,
+    "startVideo": 54.098788888019044,
+    "commit": 48.71933774201898,
+    "hit": 48.81336836697301,
+    "hitsBefore": 17,
+    "sequence": 3126,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "Accepted hit"
+    ],
+    "minimumGap": 0.058986976742744446
+  },
+  {
+    "action": 15,
+    "side": 1,
+    "start": 49.732102949987166,
+    "startVideo": 55.232102949987166,
+    "commit": 49.84065060602734,
+    "hit": 49.925450605980586,
+    "hitsBefore": 18,
+    "sequence": 3137,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "Accepted hit"
+    ],
+    "minimumGap": 0.0
+  },
+  {
+    "action": 16,
+    "side": 1,
+    "start": 51.134070292988326,
+    "startVideo": 56.634070292988326,
+    "commit": 51.23245529300766,
+    "hit": 51.31325711600948,
+    "hitsBefore": 19,
+    "sequence": 3151,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "No surface contact",
+      "Accepted hit"
+    ],
+    "minimumGap": 0.03674740344285965
+  },
+  {
+    "action": 17,
+    "side": 1,
+    "start": 55.88138711400097,
+    "startVideo": 61.38138711400097,
+    "commit": 55.972970863978844,
+    "hit": 56.08698404103052,
+    "hitsBefore": 20,
+    "sequence": 3197,
+    "maxPhase": 0.9273190498352051,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "No surface contact",
+      "Accepted hit"
+    ],
+    "minimumGap": 0.02218831330537796
+  },
+  {
+    "action": 18,
+    "side": 0,
+    "start": 56.48989956197329,
+    "startVideo": 61.98989956197329,
+    "commit": 56.48989956197329,
+    "hit": null,
+    "hitsBefore": 21,
+    "sequence": 3203,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Seeded sweep",
+      "Outside contact window or already scored",
+      "No surface contact",
+      "Moving away from bag",
+      "Limb not rearmed"
+    ],
+    "minimumGap": 0.046099551022052765
+  },
+  {
+    "action": 19,
+    "side": 1,
+    "start": 57.093944196996745,
+    "startVideo": 62.593944196996745,
+    "commit": 57.187485499016475,
+    "hit": 57.281125081994105,
+    "hitsBefore": 21,
+    "sequence": 3209,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "No surface contact",
+      "Accepted hit"
+    ],
+    "minimumGap": 0.0
+  },
+  {
+    "action": 20,
+    "side": 0,
+    "start": 57.92744378000498,
+    "startVideo": 63.42744378000498,
+    "commit": 58.02384305099258,
+    "hit": 58.112401644000784,
+    "hitsBefore": 22,
+    "sequence": 3217,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "No surface contact",
+      "Accepted hit"
+    ],
+    "minimumGap": 0.027997365221381187
+  },
+  {
+    "action": 21,
+    "side": 1,
+    "start": 58.62109060300281,
+    "startVideo": 64.12109060300281,
+    "commit": 58.72531070699915,
+    "hit": null,
+    "hitsBefore": 23,
+    "sequence": 3224,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "No surface contact"
+    ],
+    "minimumGap": 0.0775284692645073
+  },
+  {
+    "action": 22,
+    "side": 0,
+    "start": 59.570466851990204,
+    "startVideo": 65.0704668519902,
+    "commit": 59.688975342025515,
+    "hit": 59.775561436021235,
+    "hitsBefore": 23,
+    "sequence": 3233,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "No surface contact",
+      "Accepted hit"
+    ],
+    "minimumGap": 0.014923141337931156
+  },
+  {
+    "action": 23,
+    "side": 1,
+    "start": 62.24958320497535,
+    "startVideo": 67.74958320497535,
+    "commit": null,
+    "hit": null,
+    "hitsBefore": 24,
+    "sequence": 3259,
+    "maxPhase": 0.05879443883895874,
+    "contactReasons": [],
+    "minimumGap": null
+  },
+  {
+    "action": 24,
+    "side": 0,
+    "start": 63.39781481999671,
+    "startVideo": 68.89781481999671,
+    "commit": null,
+    "hit": null,
+    "hitsBefore": 24,
+    "sequence": 3270,
+    "maxPhase": 0.051473721861839294,
+    "contactReasons": [],
+    "minimumGap": null
+  },
+  {
+    "action": 25,
+    "side": 1,
+    "start": 64.29574455902912,
+    "startVideo": 69.79574455902912,
+    "commit": 64.39486830902752,
+    "hit": 64.48311992298113,
+    "hitsBefore": 24,
+    "sequence": 3279,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "No surface contact",
+      "Accepted hit"
+    ],
+    "minimumGap": 0.016271833330392838
+  },
+  {
+    "action": 26,
+    "side": 0,
+    "start": 65.29331919399556,
+    "startVideo": 70.79331919399556,
+    "commit": 65.38056492299074,
+    "hit": 65.45835414202884,
+    "hitsBefore": 25,
+    "sequence": 3290,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "No surface contact",
+      "Accepted hit"
+    ],
+    "minimumGap": 0.0
+  },
+  {
+    "action": 27,
+    "side": 1,
+    "start": 66.2584207560285,
+    "startVideo": 71.7584207560285,
+    "commit": 66.3547747139819,
+    "hit": 66.42894986999454,
+    "hitsBefore": 26,
+    "sequence": 3301,
+    "maxPhase": 1.0,
+    "contactReasons": [
+      "Outside contact window or already scored",
+      "Accepted hit"
+    ],
+    "minimumGap": 0.0
+  }
+]

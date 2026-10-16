@@ -1,0 +1,12 @@
+label,start,end,observations,blocked,commitments
+setup,0,10,79,14,0
+hold,10,14,39,0,0
+relax,14,18,39,0,0
+left slow,18,26,78,2,2
+left fast,26,34,82,15,3
+right slow,34,42,85,0,4
+right fast,42,50,80,18,1
+alternating,50,58,81,38,1
+withdrawals,58,65,71,20,1
+raise/lower,65,70,51,20,1
+step out,70,75,35,11,0

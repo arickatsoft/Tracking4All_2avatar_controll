@@ -1,0 +1,25 @@
+
+# Consider dependencies only in project.
+set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
+
+# The set of languages for which implicit dependencies are needed:
+set(CMAKE_DEPENDS_LANGUAGES
+  )
+
+# The set of dependency files which are needed:
+set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/Users/jotit/Desktop/Tracking4All_2avatar_controll/NativePose/src/fitfight_camera.cpp" "CMakeFiles/fitfight_pose.dir/fitfight_camera.cpp.o" "gcc" "CMakeFiles/fitfight_pose.dir/fitfight_camera.cpp.o.d"
+  "/Users/jotit/Desktop/Tracking4All_2avatar_controll/NativePose/src/fitfight_pose.cpp" "CMakeFiles/fitfight_pose.dir/fitfight_pose.cpp.o" "gcc" "CMakeFiles/fitfight_pose.dir/fitfight_pose.cpp.o.d"
+  "" "libfitfight_pose.so" "gcc" "CMakeFiles/fitfight_pose.dir/link.d"
+  )
+
+# Targets to which this target links which contain Fortran sources.
+set(CMAKE_Fortran_TARGET_LINKED_INFO_FILES
+  )
+
+# Targets to which this target links which contain Fortran sources.
+set(CMAKE_Fortran_TARGET_FORWARD_LINKED_INFO_FILES
+  )
+
+# Fortran module output directory.
+set(CMAKE_Fortran_TARGET_MODULE_DIR "")

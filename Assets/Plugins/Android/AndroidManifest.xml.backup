@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ========================================== -->
+    <!-- Network Permissions for UDP Pose Streaming -->
+    <!-- Required for dual-avatar UDP communication -->
+    <!-- ========================================== -->
+
+    <!-- Access network state - REQUIRED for UDP socket binding -->
+    <!-- This allows the app to detect WiFi connectivity -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Access WiFi state - REQUIRED for getting local IP address -->
+    <!-- This allows RuntimeIPInputDialog to show the device's IP -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <!-- Change WiFi state - OPTIONAL but recommended -->
+    <!-- Helps maintain stable WiFi connection during UDP streaming -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <!-- Wake lock - Prevents device from sleeping during pose streaming -->
+    <!-- CRITICAL for maintaining UDP connection in background -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- Note: INTERNET permission is automatically added by Unity -->
+    <!-- Note: CAMERA permission is added by MediaPipe plugin -->
+    <!-- Note: Unity will automatically add the MAIN/LAUNCHER activity -->
+
+</manifest>

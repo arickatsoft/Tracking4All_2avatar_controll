@@ -1,0 +1,6 @@
+Assets/Tracking4All/Models/FitFight/Bryce.fbx filter=lfs diff=lfs merge=lfs -text
+Assets/Tracking4All/Third[[:space:]]Party/MediaPipeUnity/Core/Runtime/Plugins/Android/mediapipe_android.aar filter=lfs diff=lfs merge=lfs -text
+Assets/Tracking4All/Third[[:space:]]Party/MediaPipeUnity/Core/Runtime/Plugins/iOS/MediaPipeUnity.framework/MediaPipeUnity filter=lfs diff=lfs merge=lfs -text
+Assets/Tracking4All/Third[[:space:]]Party/MediaPipeUnity/Core/Runtime/Plugins/libmediapipe_c.dylib filter=lfs diff=lfs merge=lfs -text
+NativePose/downloads/pnnx-20260704-macos.zip filter=lfs diff=lfs merge=lfs -text
+NativePose/tools/pnnx-20260704-macos/pnnx filter=lfs diff=lfs merge=lfs -text

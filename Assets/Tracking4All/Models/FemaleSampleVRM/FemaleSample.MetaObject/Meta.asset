@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b589176a34b344b9ccbee2b7e7114a, type: 3}
+  m_Name: Meta
+  m_EditorClassIdentifier: 
+  ExporterVersion: UniVRM-0.129.0
+  Title: FemaleSample
+  Version: 1.07b
+  Author: ganthefan
+  ContactInformation: www.tracking4all.com/eula
+  Reference: 
+  Thumbnail: {fileID: 2800000, guid: ecffcd1717d8da74d88cc6ba70dc07e3, type: 3}
+  AllowedUser: 0
+  ViolentUssage: 0
+  SexualUssage: 0
+  CommercialUssage: 1
+  OtherPermissionUrl: www.tracking4all.com/eula
+  LicenseType: 8
+  OtherLicenseUrl: 'Can only be used with a Tracking4All licensed project: www.tracking4all.com/eula'

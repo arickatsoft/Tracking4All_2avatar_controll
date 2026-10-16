@@ -1,0 +1,47 @@
+#pragma kernel Preprocess
+#pragma kernel MediaPipeRGBA
+Texture2D<float4> CameraTexture;
+SamplerState sampler_CameraTexture;
+RWStructuredBuffer<float> Input;
+float4 ROI;
+int Rotation;
+int VerticalFlip;
+
+[numthreads(8, 8, 1)]
+void Preprocess(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= 192 || id.y >= 256) return;
+    // Match the top-down affine warp: model pixel zero maps to ROI's top-left.
+    float2 p = ROI.xy + float2(id.x / 192.0, id.y / 256.0) * ROI.zw;
+    float2 raw = p;
+    if (Rotation == 90) raw = float2(p.y, 1 - p.x);
+    else if (Rotation == 180) raw = 1 - p;
+    else if (Rotation == 270) raw = float2(1 - p.y, p.x);
+    raw.y = 1 - raw.y;
+    if (VerticalFlip != 0) raw.y = 1 - raw.y;
+    float3 rgb = 0;
+    if (all(p >= 0) && all(p <= 1)) rgb = CameraTexture.SampleLevel(sampler_CameraTexture, raw, 0).rgb * 255;
+    float3 normalized = (rgb - float3(123.675, 116.28, 103.53)) / float3(58.395, 57.12, 57.375);
+    uint offset = id.y * 192 + id.x;
+    Input[offset] = normalized.r;
+    Input[49152 + offset] = normalized.g;
+    Input[98304 + offset] = normalized.b;
+}
+
+RWStructuredBuffer<uint> RGBA;
+int ImageWidth;
+int ImageHeight;
+[numthreads(8,8,1)]
+void MediaPipeRGBA(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= ImageWidth || id.y >= ImageHeight) return;
+    float2 p = (float2(id.xy) + .5) / float2(ImageWidth,ImageHeight);
+    float2 raw = p;
+    if (Rotation == 90) raw = float2(p.y, 1 - p.x);
+    else if (Rotation == 180) raw = 1 - p;
+    else if (Rotation == 270) raw = float2(1 - p.y, p.x);
+    raw.y = 1 - raw.y;
+    if (VerticalFlip != 0) raw.y = 1 - raw.y;
+    uint3 rgb = (uint3)round(saturate(CameraTexture.SampleLevel(sampler_CameraTexture,raw,0).rgb)*255);
+    RGBA[id.y*ImageWidth+id.x] = rgb.r | (rgb.g<<8) | (rgb.b<<16) | (255u<<24);
+}

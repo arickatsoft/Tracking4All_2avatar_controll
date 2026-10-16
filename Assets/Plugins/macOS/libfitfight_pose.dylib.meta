@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: 0df8199210f94ede8e4cf77de2a01f05
+PluginImporter:
+  serializedVersion: 2
+  isPreloaded: 0
+  platformData:
+  - first:
+      Any:
+    second:
+      enabled: 0
+      settings: {}
+  - first:
+      Editor: Editor
+    second:
+      enabled: 1
+      settings:
+        CPU: AnyCPU
+        OS: OSX
+  - first:
+      Standalone: OSXUniversal
+    second:
+      enabled: 1
+      settings:
+        CPU: AnyCPU

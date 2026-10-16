@@ -1,0 +1,12 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c12454b0fa014a168ed13cf39dd1a4fc, type: 3}
+  m_Name: FitFightPoseReference
+  guard: {fileID: -203655887218126122, guid: 23581c5794d2d544e901ed6b2c3c8b89, type: 3}
+  leftPunch: {fileID: -203655887218126122, guid: 8d9b969cb06a5a14aa38367448217f24, type: 3}
+  rightPunch: {fileID: -203655887218126122, guid: dec9205432c97344ab4692c052593386, type: 3}
+  leftContactTime: 0.22
+  rightContactTime: 0.60

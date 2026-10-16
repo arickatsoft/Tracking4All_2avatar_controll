@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <!-- Required by UnityWebCamBackend before it can create a WebCamTexture. -->
+  <uses-permission android:name="android.permission.CAMERA" />
+  <uses-feature android:name="android.hardware.camera" android:required="false" />
+
+  <!-- Required by the existing peer-to-peer pose transport. -->
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+  <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
+  <!-- Android 11+ package visibility for the system text-to-speech engine. -->
+  <queries>
+    <intent><action android:name="android.intent.action.TTS_SERVICE" /></intent>
+  </queries>
+  <application>
+    <!-- This project packages UnityPlayerActivity (see unityLibrary's generated Java). -->
+    <activity
+        android:name="com.unity3d.player.UnityPlayerActivity"
+        android:theme="@style/UnityThemeSelector"
+        android:exported="true">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+      <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
+    </activity>
+  </application>
+</manifest>

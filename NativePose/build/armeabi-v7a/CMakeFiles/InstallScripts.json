@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/jotit/Desktop/Tracking4All_2avatar_controll/NativePose/build/armeabi-v7a/cmake_install.cmake",
+		"/Users/jotit/Desktop/Tracking4All_2avatar_controll/NativePose/build/armeabi-v7a/libyuv/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

@@ -1,0 +1,1 @@
+Before-change source snapshots for the app 1.17 smoothing and tracking work. Seventeen files are preserved; this is not a complete repository snapshot. MediaPipeWorldPose.cs, RTMPosePoseProvider.cs and CameraRecoveryTest.java originals were reconstructed by reversing their exact edits. The existing app 1.16 APK and recorded-session review are preserved at their original paths.

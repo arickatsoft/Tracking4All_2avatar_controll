@@ -1,0 +1,52 @@
+{
+  "sourceSha256": "4a337c1ecd9f472b07738e552d44a94409569446c85f94c4313bcd465590a743",
+  "timeBase": "Unity recording-relative seconds using first pose as zero",
+  "approximateVideoOffsetSeconds": 2.15,
+  "labels": [
+    {
+      "category": "missed_upward_stroke",
+      "side": "left",
+      "observations": [
+        559,
+        560,
+        561
+      ],
+      "cameraAvailableRelative": [
+        29.8,
+        30.2
+      ],
+      "note": "Video about 27.7\u201328.2 s shows renewed upward extension; log is Spent after downward candidate 554. Candidate 554 must not begin on that lowering/reset trajectory. This is a reviewed diagnostic constraint, not a complete punch-technique label."
+    },
+    {
+      "category": "missed_after_gate_recovery",
+      "side": "right",
+      "observations": [
+        766,
+        767,
+        768,
+        769
+      ],
+      "recordedRelative": [
+        50.598,
+        50.895
+      ],
+      "note": "Video about 48.4\u201348.8 s shows a new unilateral upward stroke. The gate was released at recordedRelative 50.404, but detector remains Unarmed; ready acquisition required a stationary interval."
+    },
+    {
+      "category": "bilateral_overhead_negative",
+      "recordedRelative": [
+        67.3,
+        70.5
+      ],
+      "note": "Two hands actually overhead in video about 65.1\u201368.3 s. No new actions/hits during this observed gesture; do not include the single-arm movement just before it."
+    },
+    {
+      "category": "committed_without_contact",
+      "actionIds": [
+        22,
+        28
+      ],
+      "note": "Animations reached Striking, hit count did not increase. Bag trajectory/contact geometry are absent from this log; no recognition-failure label is inferred."
+    }
+  ]
+}

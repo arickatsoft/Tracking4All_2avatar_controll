@@ -1,0 +1,70 @@
+{
+  "source": "User-provided full body and punch recordings, 30 September 2026",
+  "exclusions": [
+    {
+      "file": "full body.mp4",
+      "videoStart": 142,
+      "videoEnd": 152,
+      "reason": "User performed incorrect left knee move. Excluded from movement-performance judgments."
+    },
+    {
+      "file": "full body.jsonl",
+      "recordingRelativeStart": 138,
+      "recordingRelativeEnd": 152,
+      "stage": "LEFT LEG \u00b7 GENTLE FRONT EXTENSION",
+      "reason": "Entire left front-extension stage is unscored; named video exclusion also covers early right-stage frames until about REC153.3."
+    }
+  ],
+  "observedConstraints": [
+    {
+      "file": "full body.mp4",
+      "video": 10,
+      "description": "Person standing upright with arms down; avatar retains bent-forward legs."
+    },
+    {
+      "file": "full body.mp4",
+      "video": 48,
+      "recordingRelativeApprox": 49.3,
+      "description": "Person arms laterally extended; avatar upper arms remain mostly down. Elbow landmark confidence exceeds .9."
+    },
+    {
+      "file": "full body.jsonl",
+      "recordingRelativeStart": 114,
+      "recordingRelativeEnd": 126,
+      "description": "Left knee lift, distinct from excluded left front-extension stage. Raw knee above hip in 44 accepted observations, yet displayed left ankle stays below .194 m."
+    },
+    {
+      "file": "punches.jsonl",
+      "sequenceStart": 2863,
+      "sequenceEnd": 2866,
+      "description": "Candidate locked into sweeping mode; later strong elbow extension cannot change type; expires uncommitted."
+    },
+    {
+      "file": "punchs.mp4",
+      "videoStart": 73.7,
+      "videoEnd": 76.3,
+      "recordingRelativeStartApprox": 68.2,
+      "recordingRelativeEndApprox": 70.8,
+      "description": "Actual bilateral overhead raise/hold/lower. No new action or hit; do not label earlier cue-window single-arm strokes as this negative."
+    }
+  ],
+  "contactReview": [
+    {
+      "action": 4,
+      "reason": "Moving away from bag"
+    },
+    {
+      "action": 9,
+      "reason": "Moving away from bag"
+    },
+    {
+      "action": 18,
+      "reason": "Moving away from bag"
+    },
+    {
+      "action": 21,
+      "reason": "No surface contact; minimum allowed/tracked endpoint gap .07753 m, nominal fist radius .075 m."
+    }
+  ],
+  "labelCaveat": "Scripted speech schedules and app detector outputs are not ground truth. Video offsets are approximate to 0.15 seconds. No complete punch-recall or 3D-accuracy score is assigned."
+}

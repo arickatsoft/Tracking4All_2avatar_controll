@@ -1,0 +1,27 @@
+libyuv/CMakeFiles/yuv_common_objects.dir/source/rotate_any.cc.o: \
+  /Users/jotit/Desktop/Tracking4All_2avatar_controll/NativePose/sdk/libyuv/source/rotate_any.cc \
+  /Users/jotit/Desktop/Tracking4All_2avatar_controll/NativePose/sdk/libyuv/include/libyuv/rotate.h \
+  /Applications/Unity/Hub/Editor/6000.6.0f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/stdint.h \
+  /Applications/Unity/Hub/Editor/6000.6.0f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/__config \
+  /Applications/Unity/Hub/Editor/6000.6.0f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/__config_site \
+  /Applications/Unity/Hub/Editor/6000.6.0f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/features.h \
+  /Applications/Unity/Hub/Editor/6000.6.0f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/sys/cdefs.h \
+  /Applications/Unity/Hub/Editor/6000.6.0f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/android/versioning.h \
+  /Applications/Unity/Hub/Editor/6000.6.0f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/android/api-level.h \
+  /Applications/Unity/Hub/Editor/6000.6.0f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/bits/get_device_api_level_inlines.h \
+  /Applications/Unity/Hub/Editor/6000.6.0f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/android/ndk-version.h \
+  /Applications/Unity/Hub/Editor/6000.6.0f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/18/include/stdint.h \
+  /Applications/Unity/Hub/Editor/6000.6.0f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/stdint.h \
+  /Applications/Unity/Hub/Editor/6000.6.0f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/bits/wchar_limits.h \
+  /Applications/Unity/Hub/Editor/6000.6.0f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/c++/v1/stddef.h \
+  /Applications/Unity/Hub/Editor/6000.6.0f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/18/include/stddef.h \
+  /Applications/Unity/Hub/Editor/6000.6.0f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/18/include/__stddef_ptrdiff_t.h \
+  /Applications/Unity/Hub/Editor/6000.6.0f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/18/include/__stddef_size_t.h \
+  /Applications/Unity/Hub/Editor/6000.6.0f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/18/include/__stddef_wchar_t.h \
+  /Applications/Unity/Hub/Editor/6000.6.0f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/18/include/__stddef_null.h \
+  /Applications/Unity/Hub/Editor/6000.6.0f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/18/include/__stddef_nullptr_t.h \
+  /Applications/Unity/Hub/Editor/6000.6.0f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/18/include/__stddef_max_align_t.h \
+  /Applications/Unity/Hub/Editor/6000.6.0f1/PlaybackEngines/AndroidPlayer/NDK/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/18/include/__stddef_offsetof.h \
+  /Users/jotit/Desktop/Tracking4All_2avatar_controll/NativePose/sdk/libyuv/include/libyuv/basic_types.h \
+  /Users/jotit/Desktop/Tracking4All_2avatar_controll/NativePose/sdk/libyuv/include/libyuv/rotate_row.h \
+  /Users/jotit/Desktop/Tracking4All_2avatar_controll/NativePose/sdk/libyuv/include/libyuv/cpu_support.h

@@ -1,0 +1,38 @@
+{
+  "checkedDate": "2026-10-01",
+  "unityPluginVersion": "0.14.4",
+  "models": {
+    "lite": {
+      "bundledArchiveSHA256": "59929e1d1ee95287735ddd833b19cf4ac46d29bc7afddbbf6753c459690d574a",
+      "officialLatestArchiveSHA256": "59929e1d1ee95287735ddd833b19cf4ac46d29bc7afddbbf6753c459690d574a",
+      "files": {
+        "pose_detector.tflite": {
+          "bundledSHA256": "46837eb883e6ec75b52c5f5ff6a9b78bd35e66c13f95e8c3566c582d146cb1d9",
+          "officialLatestSHA256": "46837eb883e6ec75b52c5f5ff6a9b78bd35e66c13f95e8c3566c582d146cb1d9",
+          "identical": true
+        },
+        "pose_landmarks_detector.tflite": {
+          "bundledSHA256": "ad6cfd3c903eb31a4ee788b809e45ecf9fa69923b69b9f3f2d9ae616ff433e58",
+          "officialLatestSHA256": "ad6cfd3c903eb31a4ee788b809e45ecf9fa69923b69b9f3f2d9ae616ff433e58",
+          "identical": true
+        }
+      }
+    },
+    "full": {
+      "bundledArchiveSHA256": "5134a3aad27a58b93da0088d431f366da362b44e3ccfbe3462b3827a839011b1",
+      "officialLatestArchiveSHA256": "4eaa5eb7a98365221087693fcc286334cf0858e2eb6e15b506aa4a7ecdcec4ad",
+      "files": {
+        "pose_detector.tflite": {
+          "bundledSHA256": "04f5a96483f8ce5913f8730ad2aa0c4c999c80a4b75653bc0e4712de18e104b2",
+          "officialLatestSHA256": "04f5a96483f8ce5913f8730ad2aa0c4c999c80a4b75653bc0e4712de18e104b2",
+          "identical": true
+        },
+        "pose_landmarks_detector.tflite": {
+          "bundledSHA256": "82be6d591b9dad7d29fe21dc9fd892bf8b9602c458fb05209283de8282a0c488",
+          "officialLatestSHA256": "82be6d591b9dad7d29fe21dc9fd892bf8b9602c458fb05209283de8282a0c488",
+          "identical": true
+        }
+      }
+    }
+  }
+}

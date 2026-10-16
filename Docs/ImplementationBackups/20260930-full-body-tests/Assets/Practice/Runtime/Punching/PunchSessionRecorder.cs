@@ -1,0 +1,85 @@
+using System;
+using System.Collections.Concurrent;
+using System.Globalization;
+using System.IO;
+using System.Threading;
+using UnityEngine;
+
+namespace FitFight.Practice
+{
+    /// <summary>Optional bounded writer. No synchronous file IO on the animation loop.</summary>
+    public sealed class PunchSessionRecorder : IDisposable
+    {
+        private readonly BlockingCollection<string> queue = new BlockingCollection<string>(256);
+        private readonly Thread writer;
+        private volatile string error;
+        public string Error => error;
+        private volatile bool finished;
+        public bool Finished => finished;
+        public string Path { get; }
+        public int Dropped { get; private set; }
+        private bool closed;
+        [Serializable] private struct ObservationRecord
+        {
+            public string kind;
+            public double recordedAt;
+            public PunchCameraInput.Frame observation;
+            public string leftState, rightState, leftReason, rightReason;
+            public float leftSpeed, rightSpeed;
+        }
+        [Serializable] private struct PoseRecord
+        {
+            public string kind, state;
+            public double time;
+            public long observationSequence, action;
+            public int side, hits;
+            public float phase;
+            public Vector3 root, leftFist, rightFist;
+            public Quaternion rootRotation;
+            public Quaternion[] localRotations;
+        }
+        public PunchSessionRecorder(string metadata)
+        {
+            string directory = System.IO.Path.Combine(Application.persistentDataPath, "PunchSessions");
+            Directory.CreateDirectory(directory);
+            Path = System.IO.Path.Combine(directory, DateTime.UtcNow.ToString("yyyyMMdd-HHmmss-fff", CultureInfo.InvariantCulture) + ".jsonl");
+            queue.Add(metadata);
+            writer = new Thread(Write) { IsBackground = true, Name = "FitFight punch recorder" }; writer.Start();
+        }
+        private void Write()
+        {
+            try
+            {
+                using var stream = new StreamWriter(Path);
+                foreach (string line in queue.GetConsumingEnumerable()) stream.WriteLine(line);
+                stream.WriteLine("{\"kind\":\"end\",\"droppedRecords\":" + Dropped + "}");
+            }
+            catch (Exception e) { error = e.Message; }
+            finally { finished = true; }
+        }
+        private void Add(string value)
+        {
+            if (closed || error != null) return;
+            if (!queue.TryAdd(value)) Dropped++;
+        }
+        public void Observation(PunchCameraInput.Frame frame, PunchIntent left, PunchIntent right)
+            => Add(JsonUtility.ToJson(new ObservationRecord { kind="observation", recordedAt=Time.realtimeSinceStartupAsDouble,
+                observation=frame, leftState=left.Phase.ToString(), rightState=right.Phase.ToString(), leftReason=left.Reason,
+                rightReason=right.Reason, leftSpeed=left.Speed, rightSpeed=right.Speed }));
+        public void Pose(Transform root, Transform[] bones, Transform left, Transform right, string state, float phase,
+            long sequence, long action, int side, int hits)
+        {
+            var rotations = new Quaternion[bones.Length];
+            for (int i=0; i<bones.Length; i++) rotations[i] = bones[i].localRotation;
+            Add(JsonUtility.ToJson(new PoseRecord { kind="pose", time=Time.realtimeSinceStartupAsDouble,
+                observationSequence=sequence, action=action, side=side, state=state, phase=phase, hits=hits,
+                root=root.position, rootRotation=root.rotation, leftFist=left.position, rightFist=right.position, localRotations=rotations }));
+        }
+        public void Dispose()
+        {
+            if (closed) return;
+            closed=true; queue.CompleteAdding();
+            // Background thread drains on its own; never stall a rendered frame to flush.
+        }
+    }
+}

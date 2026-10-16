@@ -1,0 +1,1637 @@
+{
+  "metadata": {
+    "kind": "session",
+    "version": "practice-5-standing-geometry",
+    "unity": "6000.6.0f1",
+    "device": "samsung SM-S928B",
+    "rig": "Remy",
+    "engine": "RTMPose",
+    "timestampNote": "Seconds on Unity realtime clock. RTMPose time is camera availability; baseline is callback delivery. guide_cue recordedAt is speech enqueue, not audible onset. Video is not encoded. REC time/frame aligns optional screen video.",
+    "test": "full_body",
+    "imageCoordinates": "Native model order. x is scaled by upright image aspect, y is up. Joint arrays are not reordered for avatar mirroring; arm features are. Halpe26 ROI uses normalized x-right/y-down.",
+    "schemaVersion": 3,
+    "recordingStartedAt": 36.19197347968838,
+    "userHeight": 1.7000000476837158,
+    "cameraPitchDegrees": 45.0,
+    "calibrated": true,
+    "assisted": false,
+    "bones": [
+      "Hips",
+      "LeftUpperLeg",
+      "RightUpperLeg",
+      "LeftLowerLeg",
+      "RightLowerLeg",
+      "LeftFoot",
+      "RightFoot",
+      "Spine",
+      "Chest",
+      "Neck",
+      "Head",
+      "LeftShoulder",
+      "RightShoulder",
+      "LeftUpperArm",
+      "RightUpperArm",
+      "LeftLowerArm",
+      "RightLowerArm",
+      "LeftHand",
+      "RightHand",
+      "LeftToes",
+      "RightToes",
+      "LeftEye",
+      "RightEye",
+      "LeftThumbProximal",
+      "LeftThumbIntermediate",
+      "LeftThumbDistal",
+      "LeftIndexProximal",
+      "LeftIndexIntermediate",
+      "LeftIndexDistal",
+      "LeftMiddleProximal",
+      "LeftMiddleIntermediate",
+      "LeftMiddleDistal",
+      "LeftRingProximal",
+      "LeftRingIntermediate",
+      "LeftRingDistal",
+      "LeftLittleProximal",
+      "LeftLittleIntermediate",
+      "LeftLittleDistal",
+      "RightThumbProximal",
+      "RightThumbIntermediate",
+      "RightThumbDistal",
+      "RightIndexProximal",
+      "RightIndexIntermediate",
+      "RightIndexDistal",
+      "RightMiddleProximal",
+      "RightMiddleIntermediate",
+      "RightMiddleDistal",
+      "RightRingProximal",
+      "RightRingIntermediate",
+      "RightRingDistal",
+      "RightLittleProximal",
+      "RightLittleIntermediate",
+      "RightLittleDistal",
+      "UpperChest"
+    ],
+    "tuning": "{\"uprightBody\":true,\"cameraVerticalFov\":60.0,\"filtering\":true,\"noiseRadius\":0.017999999225139618,\"confidenceHysteresis\":0.07999999821186066,\"bodyNoiseDegrees\":2.5,\"maxBodyBend\":65.0,\"minCutoff\":6.0,\"speedCoefficient\":8.0,\"velocityCutoff\":12.0,\"jointConfidence\":0.30000001192092896,\"prediction\":0.030707648023962975,\"occlusionGrace\":0.07999999821186066,\"maxPredictionDistance\":0.11999999731779099,\"legDeadband\":0.0,\"depthSpeed\":6.0,\"depthMotionGain\":2.0,\"requestedCameraFPS\":60,\"directAvatar\":true,\"directRotationSmoothing\":false,\"directRotationSpeedLimit\":false,\"directMaxDegreesPerSecond\":1080.0}"
+  },
+  "sha256": "b9f67a8e27124b8f10c62ae808531e01371eafd1b71c8914cd8890a983cb37e0",
+  "counts": {
+    "session": 1,
+    "guide_cue": 23,
+    "reconstruction": 2279,
+    "pose": 9774,
+    "observation": 2258,
+    "end": 1
+  },
+  "duration": 239.96265719895018,
+  "end": {
+    "kind": "end",
+    "droppedRecords": 0
+  },
+  "obsFPS": 9.409797450808853,
+  "newHits": 0,
+  "owners": {
+    "DirectTracking": 9774
+  },
+  "availabilityToReceiveMs": {
+    "min": 71.99083303567022,
+    "median": 100.30242198263295,
+    "p95": 107.86656296113506,
+    "max": 150.9204680332914
+  },
+  "observationIntervalMs": {
+    "min": 71.83651003288105,
+    "median": 101.31130198715255,
+    "p95": 116.55025999061763,
+    "max": 2275.6936450023204
+  },
+  "poseIntervalMs": {
+    "min": 4.643385007511824,
+    "median": 15.781093970872462,
+    "p95": 61.14291603444144,
+    "max": 82.00557297095656
+  },
+  "cameraFPS": {
+    "min": 19.368606567382812,
+    "median": 28.930021286010742,
+    "p95": 35.016685485839844,
+    "max": 37.73794174194336
+  },
+  "inferenceFPS": {
+    "min": 8.5032377243042,
+    "median": 9.728235244750977,
+    "p95": 10.102025032043457,
+    "max": 11.444258689880371
+  },
+  "availableToFirstDirectMs": {
+    "min": 75.09875000687316,
+    "median": 103.66580699337646,
+    "p95": 111.83729098411277,
+    "max": 154.3293750146404
+  },
+  "receiveToFirstDirectMs": {
+    "min": 1.472499978262931,
+    "median": 3.3398174855392426,
+    "p95": 4.7330730012618005,
+    "max": 9.815989003982395
+  },
+  "actions": [],
+  "cues": [
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "FULL BODY \u00b7 STEP BACK",
+      "speech": "Step back with room for raised hands overhead and sideways. Keep your head and both feet visible.",
+      "scheduledAt": 36.19197347968838,
+      "recordedAt": 36.19197347968838
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "STARTING IN 3",
+      "speech": "Three",
+      "scheduledAt": 43.19197347968838,
+      "recordedAt": 43.21908634073588
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "STARTING IN 2",
+      "speech": "Two",
+      "scheduledAt": 44.19197347968838,
+      "recordedAt": 44.20701821572401
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "STARTING IN 1",
+      "speech": "One",
+      "scheduledAt": 45.19197347968838,
+      "recordedAt": 45.19493087170667
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "HOLD STILL \u00b7 ARMS DOWN",
+      "speech": "Stand upright with arms down. Hold still for six seconds.",
+      "scheduledAt": 46.19197347968838,
+      "recordedAt": 46.20578837172615
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "ARMS FORWARD \u00b7 HOLD \u00b7 LOWER",
+      "speech": "Extend both arms forward at shoulder height. Hold for two seconds, then lower. Repeat slowly.",
+      "scheduledAt": 52.19197347968838,
+      "recordedAt": 52.20094513967887
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "ARMS OVERHEAD \u00b7 HOLD \u00b7 LOWER",
+      "speech": "Raise both arms straight above your head. Hold for two seconds, then lower. Repeat.",
+      "scheduledAt": 62.19197347968838,
+      "recordedAt": 62.22472102170831
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "ARMS TO THE SIDES \u00b7 T POSE",
+      "speech": "Extend both arms to the sides at shoulder height. Hold for two seconds, then lower. Repeat.",
+      "scheduledAt": 74.19197347968839,
+      "recordedAt": 74.20085846468827
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "BEND AND STRAIGHTEN ELBOWS",
+      "speech": "Bend both elbows to bring your hands up. Straighten forward, then sideways. Repeat slowly.",
+      "scheduledAt": 86.19197347968839,
+      "recordedAt": 86.2125844497259
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "TORSO FORWARD BEND \u00b7 RETURN",
+      "speech": "Bend your torso forward comfortably, pause, then stand upright. Keep your feet still. Repeat slowly.",
+      "scheduledAt": 98.19197347968839,
+      "recordedAt": 98.20113913271597
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "TORSO SIDE BENDS \u00b7 LEFT / RIGHT",
+      "speech": "Lean your torso left, return upright, then lean right. Keep both feet on the floor. Repeat.",
+      "scheduledAt": 112.19197347968839,
+      "recordedAt": 112.23867370967308
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "TORSO TWIST \u00b7 LEFT / RIGHT",
+      "speech": "Turn your shoulders left and right while keeping your hips facing forward. Return to center each time.",
+      "scheduledAt": 126.19197347968839,
+      "recordedAt": 126.22325380867368
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "HEAD TURN \u00b7 LEFT / RIGHT",
+      "speech": "Keep your body still. Turn your head left, then right, then look forward.",
+      "scheduledAt": 140.1919734796884,
+      "recordedAt": 140.20447073066862
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "LEFT KNEE LIFT \u00b7 HOLD \u00b7 LOWER",
+      "speech": "Lift your left knee comfortably. Hold for two seconds, then lower. Keep the other foot planted. Repeat.",
+      "scheduledAt": 150.1919734796884,
+      "recordedAt": 150.24484114266488
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "RIGHT KNEE LIFT \u00b7 HOLD \u00b7 LOWER",
+      "speech": "Lift your right knee comfortably. Hold for two seconds, then lower. Keep the other foot planted. Repeat.",
+      "scheduledAt": 162.1919734796884,
+      "recordedAt": 162.2041157736585
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "LEFT LEG \u00b7 GENTLE FRONT EXTENSION",
+      "speech": "Lift your left knee, extend the foot gently forward, bend the knee again, then lower. Repeat slowly.",
+      "scheduledAt": 174.1919734796884,
+      "recordedAt": 174.2086443626813
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "RIGHT LEG \u00b7 GENTLE FRONT EXTENSION",
+      "speech": "Lift your right knee, extend the foot gently forward, bend the knee again, then lower. Repeat slowly.",
+      "scheduledAt": 188.1919734796884,
+      "recordedAt": 188.20146076368655
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "LEFT LEG \u00b7 SIDE LIFT",
+      "speech": "Lift your left leg gently to the side, pause, then return. Keep your torso upright. Repeat slowly.",
+      "scheduledAt": 202.1919734796884,
+      "recordedAt": 202.25359534168638
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "RIGHT LEG \u00b7 SIDE LIFT",
+      "speech": "Lift your right leg gently to the side, pause, then return. Keep your torso upright. Repeat slowly.",
+      "scheduledAt": 214.1919734796884,
+      "recordedAt": 214.20031111866956
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "SQUAT \u00b7 HOLD \u00b7 STAND",
+      "speech": "Make a comfortable shallow squat. Hold for two seconds, then stand up. Repeat slowly.",
+      "scheduledAt": 226.1919734796884,
+      "recordedAt": 226.21629173866495
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "HEEL RAISES \u00b7 KEEP TOES DOWN",
+      "speech": "Raise both heels while keeping your toes on the floor, then lower. Repeat slowly.",
+      "scheduledAt": 240.1919734796884,
+      "recordedAt": 240.2254593896705
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "RETURN TO NEUTRAL \u00b7 HOLD STILL",
+      "speech": "Stand upright again with your arms down. Hold still so we can check recovery.",
+      "scheduledAt": 252.1919734796884,
+      "recordedAt": 252.19244579166661
+    },
+    {
+      "kind": "guide_cue",
+      "test": "full_body",
+      "label": "STEP OUT \u00b7 RETURN \u00b7 HOLD",
+      "speech": "Step briefly out of the camera view, then return to the same standing position. Hold still.",
+      "scheduledAt": 260.1919734796884,
+      "recordedAt": 260.19451287166703
+    }
+  ],
+  "stages": [
+    {
+      "label": "FULL BODY \u00b7 STEP BACK",
+      "start": 0.0,
+      "end": 7.027112861047499,
+      "observations": 41,
+      "poses": 310,
+      "targets": {
+        "min": 0,
+        "median": 16.0,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 45.0,
+      "lastGravity": 56.20875930786133,
+      "scale": 0.4550986588001251,
+      "leftFootY": {
+        "min": 0.11750435829162598,
+        "median": 0.12229914963245392,
+        "p95": 0.12907931208610535,
+        "max": 0.14342889189720154
+      },
+      "rightFootY": {
+        "min": 0.120489701628685,
+        "median": 0.12238412350416183,
+        "p95": 0.12787264585494995,
+        "max": 0.21333962678909302
+      },
+      "bend": {
+        "min": 6.282188678596867e-06,
+        "median": 41.23126792907715,
+        "p95": 48.313629150390625,
+        "max": 48.313629150390625
+      },
+      "yaw": {
+        "min": -10.22498607635498,
+        "median": 16.099485397338867,
+        "p95": 23.128286361694336,
+        "max": 34.17549514770508
+      },
+      "roll": {
+        "min": -4.724493980407715,
+        "median": 3.148132562637329,
+        "p95": 8.7706937789917,
+        "max": 8.7706937789917
+      },
+      "headPitch": {
+        "min": -24.995752334594727,
+        "median": -9.594646453857422,
+        "p95": 0.0,
+        "max": 13.257014274597168
+      },
+      "commits": 0,
+      "armRawValid0": 41,
+      "armObserved0": 42,
+      "armRawValid1": 40,
+      "armObserved1": 41
+    },
+    {
+      "label": "STARTING IN 3",
+      "start": 7.027112861047499,
+      "end": 8.015044736035634,
+      "observations": 10,
+      "poses": 42,
+      "targets": {
+        "min": 16,
+        "median": 16.0,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 45.0,
+      "lastGravity": 56.20875930786133,
+      "scale": 0.4550986588001251,
+      "leftFootY": {
+        "min": 0.11950325220823288,
+        "median": 0.11950624734163284,
+        "p95": 0.11950848996639252,
+        "max": 0.11951057612895966
+      },
+      "rightFootY": {
+        "min": 0.12564365565776825,
+        "median": 0.12631293386220932,
+        "p95": 0.12695357203483582,
+        "max": 0.126953586935997
+      },
+      "bend": {
+        "min": 25.726289749145508,
+        "median": 35.97233963012695,
+        "p95": 41.6485481262207,
+        "max": 41.6485481262207
+      },
+      "yaw": {
+        "min": -9.516810417175293,
+        "median": -4.380415558815002,
+        "p95": 1.7323719263076782,
+        "max": 2.1902687549591064
+      },
+      "roll": {
+        "min": 0.7796030044555664,
+        "median": 1.412061095237732,
+        "p95": 2.712977409362793,
+        "max": 2.877039909362793
+      },
+      "headPitch": {
+        "min": -21.731189727783203,
+        "median": -20.609601974487305,
+        "p95": -16.815629959106445,
+        "max": -16.815629959106445
+      },
+      "commits": 0,
+      "armRawValid0": 10,
+      "armObserved0": 10,
+      "armRawValid1": 10,
+      "armObserved1": 10
+    },
+    {
+      "label": "STARTING IN 2",
+      "start": 8.015044736035634,
+      "end": 9.002957392018288,
+      "observations": 9,
+      "poses": 39,
+      "targets": {
+        "min": 16,
+        "median": 16,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 45.0,
+      "lastGravity": 56.20875930786133,
+      "scale": 0.4550986588001251,
+      "leftFootY": {
+        "min": 0.11951056122779846,
+        "median": 0.11951476335525513,
+        "p95": 0.11951832473278046,
+        "max": 0.11951832473278046
+      },
+      "rightFootY": {
+        "min": 0.12621797621250153,
+        "median": 0.1263052225112915,
+        "p95": 0.1263105869293213,
+        "max": 0.1263105869293213
+      },
+      "bend": {
+        "min": 38.748104095458984,
+        "median": 39.10076904296875,
+        "p95": 39.10076904296875,
+        "max": 39.10076904296875
+      },
+      "yaw": {
+        "min": -5.729991912841797,
+        "median": -5.4293107986450195,
+        "p95": -5.4293107986450195,
+        "max": -5.238039016723633
+      },
+      "roll": {
+        "min": 1.3023148775100708,
+        "median": 1.3023148775100708,
+        "p95": 1.330306887626648,
+        "max": 1.350082516670227
+      },
+      "headPitch": {
+        "min": -24.96623420715332,
+        "median": -24.734905242919922,
+        "p95": -21.661304473876953,
+        "max": -21.661304473876953
+      },
+      "commits": 0,
+      "armRawValid0": 9,
+      "armObserved0": 9,
+      "armRawValid1": 9,
+      "armObserved1": 9
+    },
+    {
+      "label": "STARTING IN 1",
+      "start": 9.002957392018288,
+      "end": 10.013814892037772,
+      "observations": 10,
+      "poses": 43,
+      "targets": {
+        "min": 16,
+        "median": 16,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 45.0,
+      "lastGravity": 56.20875930786133,
+      "scale": 0.4550986588001251,
+      "leftFootY": {
+        "min": 0.11951832473278046,
+        "median": 0.11952278017997742,
+        "p95": 0.11952632665634155,
+        "max": 0.11952659487724304
+      },
+      "rightFootY": {
+        "min": 0.12621833384037018,
+        "median": 0.12642449140548706,
+        "p95": 0.12643735110759735,
+        "max": 0.12643738090991974
+      },
+      "bend": {
+        "min": 39.10076904296875,
+        "median": 40.116844177246094,
+        "p95": 41.210208892822266,
+        "max": 41.210208892822266
+      },
+      "yaw": {
+        "min": -8.57983112335205,
+        "median": -5.769078731536865,
+        "p95": -5.76905632019043,
+        "max": -5.4293107986450195
+      },
+      "roll": {
+        "min": 0.5011006593704224,
+        "median": 1.0968377590179443,
+        "p95": 1.0968514680862427,
+        "max": 1.3023148775100708
+      },
+      "headPitch": {
+        "min": -24.99994659423828,
+        "median": -24.996463775634766,
+        "p95": -24.96631622314453,
+        "max": -24.96623420715332
+      },
+      "commits": 0,
+      "armRawValid0": 10,
+      "armObserved0": 10,
+      "armRawValid1": 10,
+      "armObserved1": 10
+    },
+    {
+      "label": "HOLD STILL \u00b7 ARMS DOWN",
+      "start": 10.013814892037772,
+      "end": 16.008971659990493,
+      "observations": 37,
+      "poses": 242,
+      "targets": {
+        "min": 0,
+        "median": 16.0,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 22.393230438232422,
+      "lastGravity": 22.393230438232422,
+      "scale": 1.4954845905303955,
+      "leftFootY": {
+        "min": 0.11890889704227448,
+        "median": 0.11927514523267746,
+        "p95": 0.12229928374290466,
+        "max": 0.122299425303936
+      },
+      "rightFootY": {
+        "min": 0.11510291695594788,
+        "median": 0.11979863047599792,
+        "p95": 0.12237533181905746,
+        "max": 0.12621833384037018
+      },
+      "bend": {
+        "min": 0.0,
+        "median": 0.0,
+        "p95": 0.0,
+        "max": 0.0
+      },
+      "yaw": {
+        "min": -0.0019869424868375063,
+        "median": -0.0019869424868375063,
+        "p95": 0.0,
+        "max": 0.0
+      },
+      "roll": {
+        "min": 0.0,
+        "median": 0.00011775906023103744,
+        "p95": 0.00011775906023103744,
+        "max": 0.00011775906023103744
+      },
+      "headPitch": {
+        "min": -3.5521135330200195,
+        "median": -1.2144949436187744,
+        "p95": 0.8379301428794861,
+        "max": 3.39320707321167
+      },
+      "commits": 0,
+      "armRawValid0": 37,
+      "armObserved0": 56,
+      "armRawValid1": 37,
+      "armObserved1": 56
+    },
+    {
+      "label": "ARMS FORWARD \u00b7 HOLD \u00b7 LOWER",
+      "start": 16.008971659990493,
+      "end": 26.032747542019933,
+      "observations": 96,
+      "poses": 409,
+      "targets": {
+        "min": 16,
+        "median": 16,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 22.393230438232422,
+      "lastGravity": 22.393230438232422,
+      "scale": 1.4954845905303955,
+      "leftFootY": {
+        "min": 0.11863862723112106,
+        "median": 0.11919118463993073,
+        "p95": 0.11937926709651947,
+        "max": 0.11937926709651947
+      },
+      "rightFootY": {
+        "min": 0.11979853361845016,
+        "median": 0.11979863047599792,
+        "p95": 0.11979871243238449,
+        "max": 0.11979876458644867
+      },
+      "bend": {
+        "min": 0.0,
+        "median": 0.0,
+        "p95": 0.0047652763314545155,
+        "max": 0.006858759559690952
+      },
+      "yaw": {
+        "min": -2.021721839904785,
+        "median": 5.283139705657959,
+        "p95": 9.181528091430664,
+        "max": 10.496333122253418
+      },
+      "roll": {
+        "min": -0.8052907586097717,
+        "median": -0.10489866137504578,
+        "p95": 0.13277789950370789,
+        "max": 0.13277789950370789
+      },
+      "headPitch": {
+        "min": -13.396166801452637,
+        "median": -4.75225830078125,
+        "p95": 1.2166846990585327,
+        "max": 2.3884568214416504
+      },
+      "commits": 0,
+      "armRawValid0": 96,
+      "armObserved0": 96,
+      "armRawValid1": 96,
+      "armObserved1": 96
+    },
+    {
+      "label": "ARMS OVERHEAD \u00b7 HOLD \u00b7 LOWER",
+      "start": 26.032747542019933,
+      "end": 38.00888498499989,
+      "observations": 115,
+      "poses": 491,
+      "targets": {
+        "min": 16,
+        "median": 16,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 22.393230438232422,
+      "lastGravity": 22.393230438232422,
+      "scale": 1.4954845905303955,
+      "leftFootY": {
+        "min": 0.11826474219560623,
+        "median": 0.11866766959428787,
+        "p95": 0.11959145963191986,
+        "max": 0.11975785344839096
+      },
+      "rightFootY": {
+        "min": 0.11979855597019196,
+        "median": 0.1197987049818039,
+        "p95": 0.12050201743841171,
+        "max": 0.12052101641893387
+      },
+      "bend": {
+        "min": 5.46436742967886e-14,
+        "median": 3.892342559375095e-10,
+        "p95": 2.67677751253359e-06,
+        "max": 2.6771208467835095e-06
+      },
+      "yaw": {
+        "min": -0.9348214864730835,
+        "median": 5.3472185134887695,
+        "p95": 9.766976356506348,
+        "max": 18.327266693115234
+      },
+      "roll": {
+        "min": -2.1374807357788086,
+        "median": -0.7677631378173828,
+        "p95": 0.40072792768478394,
+        "max": 0.6165156364440918
+      },
+      "headPitch": {
+        "min": -22.87455177307129,
+        "median": -5.697943210601807,
+        "p95": 1.4629647731781006,
+        "max": 2.6367156505584717
+      },
+      "commits": 0,
+      "armRawValid0": 115,
+      "armObserved0": 115,
+      "armRawValid1": 114,
+      "armObserved1": 115
+    },
+    {
+      "label": "ARMS TO THE SIDES \u00b7 T POSE",
+      "start": 38.00888498499989,
+      "end": 50.02061097003752,
+      "observations": 116,
+      "poses": 486,
+      "targets": {
+        "min": 16,
+        "median": 16.0,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 22.393230438232422,
+      "lastGravity": 22.393230438232422,
+      "scale": 1.4954845905303955,
+      "leftFootY": {
+        "min": 0.11830568313598633,
+        "median": 0.11928714066743851,
+        "p95": 0.11986494064331055,
+        "max": 0.11987975239753723
+      },
+      "rightFootY": {
+        "min": 0.11979855597019196,
+        "median": 0.11979864537715912,
+        "p95": 0.12052414566278458,
+        "max": 0.12052587419748306
+      },
+      "bend": {
+        "min": 3.9070355545104145e-16,
+        "median": 0.0002487777383066714,
+        "p95": 0.010387538000941277,
+        "max": 0.029816336929798126
+      },
+      "yaw": {
+        "min": -0.7130364179611206,
+        "median": 4.862978935241699,
+        "p95": 7.372245788574219,
+        "max": 12.56646728515625
+      },
+      "roll": {
+        "min": -2.139883279800415,
+        "median": 0.015847433358430862,
+        "p95": 0.746098518371582,
+        "max": 0.7651199698448181
+      },
+      "headPitch": {
+        "min": -18.090599060058594,
+        "median": -1.4637279510498047,
+        "p95": 1.1241235733032227,
+        "max": 3.3397183418273926
+      },
+      "commits": 0,
+      "armRawValid0": 116,
+      "armObserved0": 116,
+      "armRawValid1": 116,
+      "armObserved1": 116
+    },
+    {
+      "label": "BEND AND STRAIGHTEN ELBOWS",
+      "start": 50.02061097003752,
+      "end": 62.00916565302759,
+      "observations": 117,
+      "poses": 488,
+      "targets": {
+        "min": 16,
+        "median": 16.0,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 22.393230438232422,
+      "lastGravity": 22.393230438232422,
+      "scale": 1.4954845905303955,
+      "leftFootY": {
+        "min": 0.11830878257751465,
+        "median": 0.11892648041248322,
+        "p95": 0.11955606192350388,
+        "max": 0.11955748498439789
+      },
+      "rightFootY": {
+        "min": 0.11979853361845016,
+        "median": 0.1197986751794815,
+        "p95": 0.12064908444881439,
+        "max": 0.12065690010786057
+      },
+      "bend": {
+        "min": 3.194282685581307e-11,
+        "median": 8.048054587561637e-05,
+        "p95": 0.002276582643389702,
+        "max": 0.002288184128701687
+      },
+      "yaw": {
+        "min": -3.8700761795043945,
+        "median": 5.045832633972168,
+        "p95": 7.847648620605469,
+        "max": 9.576120376586914
+      },
+      "roll": {
+        "min": -2.2968156337738037,
+        "median": -0.441463828086853,
+        "p95": 0.3563918471336365,
+        "max": 0.3580274283885956
+      },
+      "headPitch": {
+        "min": -13.202417373657227,
+        "median": 0.3432598114013672,
+        "p95": 3.4188473224639893,
+        "max": 3.7940475940704346
+      },
+      "commits": 0,
+      "armRawValid0": 117,
+      "armObserved0": 117,
+      "armRawValid1": 117,
+      "armObserved1": 117
+    },
+    {
+      "label": "TORSO FORWARD BEND \u00b7 RETURN",
+      "start": 62.00916565302759,
+      "end": 76.04670022998471,
+      "observations": 136,
+      "poses": 567,
+      "targets": {
+        "min": 16,
+        "median": 16,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 22.393230438232422,
+      "lastGravity": 22.393230438232422,
+      "scale": 1.4954845905303955,
+      "leftFootY": {
+        "min": 0.11818131804466248,
+        "median": 0.11894035339355469,
+        "p95": 0.12324026226997375,
+        "max": 0.12850084900856018
+      },
+      "rightFootY": {
+        "min": 0.11979853361845016,
+        "median": 0.11980852484703064,
+        "p95": 0.1293608397245407,
+        "max": 0.16935406625270844
+      },
+      "bend": {
+        "min": 2.2678771837911227e-14,
+        "median": 5.912336158847564e-12,
+        "p95": 50.2205810546875,
+        "max": 52.052955627441406
+      },
+      "yaw": {
+        "min": -12.323709487915039,
+        "median": 1.951422095298767,
+        "p95": 6.195237159729004,
+        "max": 7.32163667678833
+      },
+      "roll": {
+        "min": -5.347087860107422,
+        "median": -0.7481483817100525,
+        "p95": -0.013327749446034431,
+        "max": 0.5377095937728882
+      },
+      "headPitch": {
+        "min": -3.530506134033203,
+        "median": 3.1525866985321045,
+        "p95": 18.807750701904297,
+        "max": 19.358539581298828
+      },
+      "commits": 0,
+      "armRawValid0": 136,
+      "armObserved0": 136,
+      "armRawValid1": 136,
+      "armObserved1": 136
+    },
+    {
+      "label": "TORSO SIDE BENDS \u00b7 LEFT / RIGHT",
+      "start": 76.04670022998471,
+      "end": 90.0312803289853,
+      "observations": 136,
+      "poses": 567,
+      "targets": {
+        "min": 16,
+        "median": 16,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 22.393230438232422,
+      "lastGravity": 22.393230438232422,
+      "scale": 1.4954845905303955,
+      "leftFootY": {
+        "min": 0.11719827353954315,
+        "median": 0.11823701113462448,
+        "p95": 0.13922514021396637,
+        "max": 0.1577066034078598
+      },
+      "rightFootY": {
+        "min": 0.11980854719877243,
+        "median": 0.12487448751926422,
+        "p95": 0.14764879643917084,
+        "max": 0.3188515603542328
+      },
+      "bend": {
+        "min": 1.6733938182616342e-13,
+        "median": 0.4478408098220825,
+        "p95": 52.14775466918945,
+        "max": 52.25621795654297
+      },
+      "yaw": {
+        "min": -43.78231430053711,
+        "median": 2.9755685329437256,
+        "p95": 31.809492111206055,
+        "max": 43.89189910888672
+      },
+      "roll": {
+        "min": -28.599925994873047,
+        "median": -2.234355926513672,
+        "p95": 25.10222625732422,
+        "max": 25.223236083984375
+      },
+      "headPitch": {
+        "min": -23.46857261657715,
+        "median": -0.8331969380378723,
+        "p95": 18.431467056274414,
+        "max": 19.876285552978516
+      },
+      "commits": 0,
+      "armRawValid0": 136,
+      "armObserved0": 136,
+      "armRawValid1": 136,
+      "armObserved1": 136
+    },
+    {
+      "label": "TORSO TWIST \u00b7 LEFT / RIGHT",
+      "start": 90.0312803289853,
+      "end": 104.01249725098023,
+      "observations": 136,
+      "poses": 568,
+      "targets": {
+        "min": 15,
+        "median": 16.0,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 22.393230438232422,
+      "lastGravity": 22.393230438232422,
+      "scale": 1.4954845905303955,
+      "leftFootY": {
+        "min": 0.11805296689271927,
+        "median": 0.11915100365877151,
+        "p95": 0.13438038527965546,
+        "max": 0.15501007437705994
+      },
+      "rightFootY": {
+        "min": 0.11988436430692673,
+        "median": 0.12034361809492111,
+        "p95": 0.12466595321893692,
+        "max": 0.13425736129283905
+      },
+      "bend": {
+        "min": 3.85123246866472e-33,
+        "median": 2.943814081390883e-10,
+        "p95": 0.23373882472515106,
+        "max": 2.8077852725982666
+      },
+      "yaw": {
+        "min": -44.856327056884766,
+        "median": -5.039698600769043,
+        "p95": 44.53867721557617,
+        "max": 44.901912689208984
+      },
+      "roll": {
+        "min": -10.397540092468262,
+        "median": 0.43655550479888916,
+        "p95": 24.511316299438477,
+        "max": 26.877498626708984
+      },
+      "headPitch": {
+        "min": -18.228601455688477,
+        "median": 0.6448315382003784,
+        "p95": 14.923097610473633,
+        "max": 18.555957794189453
+      },
+      "commits": 0,
+      "armRawValid0": 136,
+      "armObserved0": 136,
+      "armRawValid1": 123,
+      "armObserved1": 134
+    },
+    {
+      "label": "HEAD TURN \u00b7 LEFT / RIGHT",
+      "start": 104.01249725098023,
+      "end": 114.0528676629765,
+      "observations": 97,
+      "poses": 409,
+      "targets": {
+        "min": 16,
+        "median": 16,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 22.393230438232422,
+      "lastGravity": 22.393230438232422,
+      "scale": 1.4954845905303955,
+      "leftFootY": {
+        "min": 0.11810635030269623,
+        "median": 0.12166272103786469,
+        "p95": 0.12391266971826553,
+        "max": 0.12392023950815201
+      },
+      "rightFootY": {
+        "min": 0.12019156664609909,
+        "median": 0.12028918415307999,
+        "p95": 0.12062183767557144,
+        "max": 0.1219412088394165
+      },
+      "bend": {
+        "min": 0.0,
+        "median": 3.3302265564154044e-33,
+        "p95": 0.013442686758935452,
+        "max": 0.12475381791591644
+      },
+      "yaw": {
+        "min": -9.046538352966309,
+        "median": 4.983008861541748,
+        "p95": 44.915184020996094,
+        "max": 44.94987106323242
+      },
+      "roll": {
+        "min": -5.260220050811768,
+        "median": 0.008981919847428799,
+        "p95": 2.950103759765625,
+        "max": 2.950103759765625
+      },
+      "headPitch": {
+        "min": -23.15910530090332,
+        "median": -4.52114200592041,
+        "p95": 3.595547676086426,
+        "max": 4.853893280029297
+      },
+      "commits": 0,
+      "armRawValid0": 94,
+      "armObserved0": 97,
+      "armRawValid1": 97,
+      "armObserved1": 97
+    },
+    {
+      "label": "LEFT KNEE LIFT \u00b7 HOLD \u00b7 LOWER",
+      "start": 114.0528676629765,
+      "end": 126.0121422939701,
+      "observations": 117,
+      "poses": 486,
+      "targets": {
+        "min": 16,
+        "median": 16.0,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 22.393230438232422,
+      "lastGravity": 22.393230438232422,
+      "scale": 1.4954845905303955,
+      "leftFootY": {
+        "min": 0.12085636705160141,
+        "median": 0.12228693813085556,
+        "p95": 0.9471789598464966,
+        "max": 0.9472990036010742
+      },
+      "rightFootY": {
+        "min": 0.11919757723808289,
+        "median": 0.12030218541622162,
+        "p95": 0.12044541537761688,
+        "max": 0.12086267024278641
+      },
+      "bend": {
+        "min": 1.5962699217997312e-10,
+        "median": 1.8206682739219104e-07,
+        "p95": 3.200099229812622,
+        "max": 26.190738677978516
+      },
+      "yaw": {
+        "min": 4.122107982635498,
+        "median": 11.101726531982422,
+        "p95": 26.249895095825195,
+        "max": 28.563621520996094
+      },
+      "roll": {
+        "min": -0.6561186909675598,
+        "median": 0.7341327667236328,
+        "p95": 4.273443698883057,
+        "max": 5.057084560394287
+      },
+      "headPitch": {
+        "min": -23.152067184448242,
+        "median": -1.824156641960144,
+        "p95": 2.262331962585449,
+        "max": 5.053624153137207
+      },
+      "commits": 0,
+      "armRawValid0": 117,
+      "armObserved0": 117,
+      "armRawValid1": 117,
+      "armObserved1": 117
+    },
+    {
+      "label": "RIGHT KNEE LIFT \u00b7 HOLD \u00b7 LOWER",
+      "start": 126.0121422939701,
+      "end": 138.0166708829929,
+      "observations": 116,
+      "poses": 487,
+      "targets": {
+        "min": 13,
+        "median": 16,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 22.393230438232422,
+      "lastGravity": 22.393230438232422,
+      "scale": 1.4954845905303955,
+      "leftFootY": {
+        "min": 0.11685612797737122,
+        "median": 0.12197139114141464,
+        "p95": 0.8041388988494873,
+        "max": 0.9471789598464966
+      },
+      "rightFootY": {
+        "min": 0.11976641416549683,
+        "median": 0.12056288123130798,
+        "p95": 0.9324076771736145,
+        "max": 0.9555354118347168
+      },
+      "bend": {
+        "min": 0.000148018283653073,
+        "median": 0.050027139484882355,
+        "p95": 7.328141689300537,
+        "max": 31.702335357666016
+      },
+      "yaw": {
+        "min": -3.9656474590301514,
+        "median": 6.575370788574219,
+        "p95": 22.91825294494629,
+        "max": 22.91825294494629
+      },
+      "roll": {
+        "min": -8.313155174255371,
+        "median": -1.624253273010254,
+        "p95": 3.6063852310180664,
+        "max": 4.870259761810303
+      },
+      "headPitch": {
+        "min": -5.347473621368408,
+        "median": -1.2642507553100586,
+        "p95": 2.295926570892334,
+        "max": 5.691173553466797
+      },
+      "commits": 0,
+      "armRawValid0": 116,
+      "armObserved0": 116,
+      "armRawValid1": 116,
+      "armObserved1": 116
+    },
+    {
+      "label": "LEFT LEG \u00b7 GENTLE FRONT EXTENSION",
+      "start": 138.0166708829929,
+      "end": 152.00948728399817,
+      "observations": 138,
+      "poses": 566,
+      "targets": {
+        "min": 15,
+        "median": 16.0,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 22.393230438232422,
+      "lastGravity": 22.393230438232422,
+      "scale": 1.4954845905303955,
+      "leftFootY": {
+        "min": 0.11842480301856995,
+        "median": 0.12318644672632217,
+        "p95": 1.6554564237594604,
+        "max": 1.789140224456787
+      },
+      "rightFootY": {
+        "min": 0.11903508752584457,
+        "median": 0.11969751119613647,
+        "p95": 0.12050922960042953,
+        "max": 0.12051232159137726
+      },
+      "bend": {
+        "min": 0.0014063059352338314,
+        "median": 0.14727656543254852,
+        "p95": 27.55255126953125,
+        "max": 36.955352783203125
+      },
+      "yaw": {
+        "min": -1.0391029119491577,
+        "median": 12.162153244018555,
+        "p95": 23.42863655090332,
+        "max": 26.4035587310791
+      },
+      "roll": {
+        "min": -3.0329039096832275,
+        "median": 2.1893181800842285,
+        "p95": 7.170778274536133,
+        "max": 8.488157272338867
+      },
+      "headPitch": {
+        "min": -5.058258533477783,
+        "median": -0.25455474853515625,
+        "p95": 3.6001319885253906,
+        "max": 6.101234436035156
+      },
+      "commits": 0,
+      "armRawValid0": 137,
+      "armObserved0": 137,
+      "armRawValid1": 138,
+      "armObserved1": 138
+    },
+    {
+      "label": "RIGHT LEG \u00b7 GENTLE FRONT EXTENSION",
+      "start": 152.00948728399817,
+      "end": 166.061621861998,
+      "observations": 135,
+      "poses": 571,
+      "targets": {
+        "min": 14,
+        "median": 16,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 22.393230438232422,
+      "lastGravity": 22.393230438232422,
+      "scale": 1.4954845905303955,
+      "leftFootY": {
+        "min": 0.11639898270368576,
+        "median": 0.11747565120458603,
+        "p95": 0.12133315950632095,
+        "max": 0.12174276262521744
+      },
+      "rightFootY": {
+        "min": 0.11847490817308426,
+        "median": 0.5087192058563232,
+        "p95": 1.7657220363616943,
+        "max": 1.7774159908294678
+      },
+      "bend": {
+        "min": 0.0002699473698157817,
+        "median": 0.23187582194805145,
+        "p95": 30.67738151550293,
+        "max": 39.14363479614258
+      },
+      "yaw": {
+        "min": -11.069295883178711,
+        "median": 2.3825788497924805,
+        "p95": 11.734000205993652,
+        "max": 13.476286888122559
+      },
+      "roll": {
+        "min": -10.16001033782959,
+        "median": -3.612055540084839,
+        "p95": -0.3232988119125366,
+        "max": -0.26246288418769836
+      },
+      "headPitch": {
+        "min": -10.178282737731934,
+        "median": 1.166083812713623,
+        "p95": 5.594764709472656,
+        "max": 8.205708503723145
+      },
+      "commits": 0,
+      "armRawValid0": 135,
+      "armObserved0": 135,
+      "armRawValid1": 135,
+      "armObserved1": 135
+    },
+    {
+      "label": "LEFT LEG \u00b7 SIDE LIFT",
+      "start": 166.061621861998,
+      "end": 178.00833763898117,
+      "observations": 117,
+      "poses": 487,
+      "targets": {
+        "min": 15,
+        "median": 16,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 22.393230438232422,
+      "lastGravity": 22.393230438232422,
+      "scale": 1.4954845905303955,
+      "leftFootY": {
+        "min": 0.1176527664065361,
+        "median": 0.11844460666179657,
+        "p95": 0.41205987334251404,
+        "max": 0.581320583820343
+      },
+      "rightFootY": {
+        "min": 0.118392713367939,
+        "median": 0.11995367705821991,
+        "p95": 0.12191610783338547,
+        "max": 0.12194649130105972
+      },
+      "bend": {
+        "min": 3.9292971685510336e-16,
+        "median": 7.156147034947935e-07,
+        "p95": 0.007793264463543892,
+        "max": 0.011999597772955894
+      },
+      "yaw": {
+        "min": -3.1154870986938477,
+        "median": 7.9890546798706055,
+        "p95": 43.546722412109375,
+        "max": 43.546722412109375
+      },
+      "roll": {
+        "min": -2.3801708221435547,
+        "median": 0.5879477858543396,
+        "p95": 15.884448051452637,
+        "max": 17.035198211669922
+      },
+      "headPitch": {
+        "min": -3.0537660121917725,
+        "median": 4.465403079986572,
+        "p95": 8.11143970489502,
+        "max": 10.819225311279297
+      },
+      "commits": 0,
+      "armRawValid0": 117,
+      "armObserved0": 117,
+      "armRawValid1": 117,
+      "armObserved1": 117
+    },
+    {
+      "label": "RIGHT LEG \u00b7 SIDE LIFT",
+      "start": 178.00833763898117,
+      "end": 190.02431825897656,
+      "observations": 116,
+      "poses": 487,
+      "targets": {
+        "min": 13,
+        "median": 16,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 22.393230438232422,
+      "lastGravity": 22.393230438232422,
+      "scale": 1.4954845905303955,
+      "leftFootY": {
+        "min": 0.09443697333335876,
+        "median": 0.1184416115283966,
+        "p95": 0.11908508837223053,
+        "max": 0.5383828282356262
+      },
+      "rightFootY": {
+        "min": 0.12066717445850372,
+        "median": 0.12616869807243347,
+        "p95": 0.5036520957946777,
+        "max": 0.6223849058151245
+      },
+      "bend": {
+        "min": 1.5295452997798243e-39,
+        "median": 2.6018072812793928e-17,
+        "p95": 0.001322625670582056,
+        "max": 0.4465063810348511
+      },
+      "yaw": {
+        "min": -31.16718864440918,
+        "median": -5.851863384246826,
+        "p95": 8.524798393249512,
+        "max": 43.22004699707031
+      },
+      "roll": {
+        "min": -34.64348602294922,
+        "median": -5.87112283706665,
+        "p95": -0.6570504903793335,
+        "max": 0.13590878248214722
+      },
+      "headPitch": {
+        "min": -2.962761402130127,
+        "median": 4.329986572265625,
+        "p95": 16.15496253967285,
+        "max": 18.830026626586914
+      },
+      "commits": 0,
+      "armRawValid0": 112,
+      "armObserved0": 112,
+      "armRawValid1": 110,
+      "armObserved1": 113
+    },
+    {
+      "label": "SQUAT \u00b7 HOLD \u00b7 STAND",
+      "start": 190.02431825897656,
+      "end": 204.03348590998212,
+      "observations": 135,
+      "poses": 572,
+      "targets": {
+        "min": 16,
+        "median": 16.0,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 22.393230438232422,
+      "lastGravity": 22.393230438232422,
+      "scale": 1.4954845905303955,
+      "leftFootY": {
+        "min": 0.11618861556053162,
+        "median": 0.11842133104801178,
+        "p95": 0.20290571451187134,
+        "max": 0.2436751276254654
+      },
+      "rightFootY": {
+        "min": 0.1167002022266388,
+        "median": 0.11946575343608856,
+        "p95": 0.12461607903242111,
+        "max": 0.13541658222675323
+      },
+      "bend": {
+        "min": 1.6746585629334731e-07,
+        "median": 11.121439933776855,
+        "p95": 34.315982818603516,
+        "max": 35.30179977416992
+      },
+      "yaw": {
+        "min": -8.366691589355469,
+        "median": -1.7427821159362793,
+        "p95": 6.603317737579346,
+        "max": 6.7005743980407715
+      },
+      "roll": {
+        "min": -5.725895881652832,
+        "median": -2.308100938796997,
+        "p95": -0.5102969408035278,
+        "max": -0.41535088419914246
+      },
+      "headPitch": {
+        "min": -5.773134231567383,
+        "median": 7.426117897033691,
+        "p95": 11.952695846557617,
+        "max": 13.19360065460205
+      },
+      "commits": 0,
+      "armRawValid0": 135,
+      "armObserved0": 135,
+      "armRawValid1": 135,
+      "armObserved1": 135
+    },
+    {
+      "label": "HEEL RAISES \u00b7 KEEP TOES DOWN",
+      "start": 204.03348590998212,
+      "end": 216.00047231197823,
+      "observations": 117,
+      "poses": 485,
+      "targets": {
+        "min": 16,
+        "median": 16,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 22.393230438232422,
+      "lastGravity": 22.393230438232422,
+      "scale": 1.4954845905303955,
+      "leftFootY": {
+        "min": 0.1181875541806221,
+        "median": 0.11946120113134384,
+        "p95": 0.12007396668195724,
+        "max": 0.12045995891094208
+      },
+      "rightFootY": {
+        "min": 0.1194462776184082,
+        "median": 0.11980076879262924,
+        "p95": 0.120489202439785,
+        "max": 0.12070354074239731
+      },
+      "bend": {
+        "min": 0.013984483666718006,
+        "median": 0.06627167761325836,
+        "p95": 0.4342811703681946,
+        "max": 5.23148250579834
+      },
+      "yaw": {
+        "min": 0.8872427344322205,
+        "median": 7.187261581420898,
+        "p95": 10.566549301147461,
+        "max": 12.926112174987793
+      },
+      "roll": {
+        "min": -2.176187038421631,
+        "median": 0.034523945301771164,
+        "p95": 0.3384591341018677,
+        "max": 0.5755683183670044
+      },
+      "headPitch": {
+        "min": -1.3928881883621216,
+        "median": 3.9524245262145996,
+        "p95": 8.897706985473633,
+        "max": 11.597493171691895
+      },
+      "commits": 0,
+      "armRawValid0": 117,
+      "armObserved0": 117,
+      "armRawValid1": 117,
+      "armObserved1": 117
+    },
+    {
+      "label": "RETURN TO NEUTRAL \u00b7 HOLD STILL",
+      "start": 216.00047231197823,
+      "end": 224.00253939197864,
+      "observations": 79,
+      "poses": 323,
+      "targets": {
+        "min": 16,
+        "median": 16,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 22.393230438232422,
+      "lastGravity": 22.393230438232422,
+      "scale": 1.4954845905303955,
+      "leftFootY": {
+        "min": 0.11793077737092972,
+        "median": 0.11916372179985046,
+        "p95": 0.11983875930309296,
+        "max": 0.1200466901063919
+      },
+      "rightFootY": {
+        "min": 0.11998921632766724,
+        "median": 0.11999573558568954,
+        "p95": 0.12029672414064407,
+        "max": 0.12052613496780396
+      },
+      "bend": {
+        "min": 0.0022609836887568235,
+        "median": 0.9106927514076233,
+        "p95": 2.5200695991516113,
+        "max": 18.349084854125977
+      },
+      "yaw": {
+        "min": 0.36207759380340576,
+        "median": 3.469594955444336,
+        "p95": 13.352093696594238,
+        "max": 14.223422050476074
+      },
+      "roll": {
+        "min": -0.8547930121421814,
+        "median": 0.40160098671913147,
+        "p95": 1.0275524854660034,
+        "max": 1.1379544734954834
+      },
+      "headPitch": {
+        "min": -4.3636956214904785,
+        "median": -1.0001729726791382,
+        "p95": 2.0719122886657715,
+        "max": 2.512272834777832
+      },
+      "commits": 0,
+      "armRawValid0": 79,
+      "armObserved0": 79,
+      "armRawValid1": 79,
+      "armObserved1": 79
+    },
+    {
+      "label": "STEP OUT \u00b7 RETURN \u00b7 HOLD",
+      "start": 224.00253939197864,
+      "end": 239.96265719895018,
+      "observations": 132,
+      "poses": 648,
+      "targets": {
+        "min": 0,
+        "median": 16.0,
+        "p95": 16,
+        "max": 16
+      },
+      "lastPitch": 22.393230438232422,
+      "lastGravity": 22.393230438232422,
+      "scale": 1.4954845905303955,
+      "leftFootY": {
+        "min": 0.11478598415851593,
+        "median": 0.11810073256492615,
+        "p95": 0.12921643257141113,
+        "max": 0.1476789116859436
+      },
+      "rightFootY": {
+        "min": 0.11459888517856598,
+        "median": 0.12253181263804436,
+        "p95": 0.143424853682518,
+        "max": 0.2430184930562973
+      },
+      "bend": {
+        "min": 1.5689053416069899e-15,
+        "median": 0.006694580428302288,
+        "p95": 0.8595508337020874,
+        "max": 7.0693769454956055
+      },
+      "yaw": {
+        "min": -43.5411376953125,
+        "median": 2.1345553398132324,
+        "p95": 43.50688934326172,
+        "max": 43.97739028930664
+      },
+      "roll": {
+        "min": -12.53250503540039,
+        "median": -0.3426697254180908,
+        "p95": 2.841756820678711,
+        "max": 8.962839126586914
+      },
+      "headPitch": {
+        "min": -6.766562461853027,
+        "median": 3.2015328407287598,
+        "p95": 12.070230484008789,
+        "max": 14.176054954528809
+      },
+      "commits": 0,
+      "armRawValid0": 131,
+      "armObserved0": 132,
+      "armRawValid1": 129,
+      "armObserved1": 132
+    }
+  ]
+}

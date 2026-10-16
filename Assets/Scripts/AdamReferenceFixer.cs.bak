@@ -1,0 +1,62 @@
+using UnityEngine;
+
+public class AdamReferenceFixer : MonoBehaviour
+{
+    public GameObject currentAdam;
+    
+    [ContextMenu(\"Find Current Adam\")]
+    public void FindCurrentAdam()
+    {
+        GameObject[] allObjects = FindObjectsOfType<GameObject>();
+        foreach (GameObject obj in allObjects)
+        {
+            if (obj.name == \"Adam\" && obj.CompareTag(\"Enemy\"))
+            {
+                currentAdam = obj;
+                Debug.Log(\"Found current Adam: \" + obj.name + \" at \" + obj.transform.position);
+                break;
+            }
+        }
+        
+        if (currentAdam == null)
+        {
+            Debug.LogError(\"Could not find Adam with Enemy tag!\");
+        }
+    }
+    
+    [ContextMenu(\"Find All References\")]
+    public void FindAllReferences()
+    {
+        if (currentAdam == null) FindCurrentAdam();
+        if (currentAdam == null) return;
+        
+        Debug.Log(\"=== SEARCHING FOR ADAM REFERENCES ===\");
+        
+        MonoBehaviour[] allScripts = FindObjectsOfType<MonoBehaviour>();
+        
+        foreach (MonoBehaviour script in allScripts)
+        {
+            if (script == null) continue;
+            CheckScriptForReferences(script);
+        }
+    }
+    
+    private void CheckScriptForReferences(MonoBehaviour script)
+    {
+        var fields = script.GetType().GetFields();
+        
+        foreach (var field in fields)
+        {
+            if (field.FieldType == typeof(GameObject))
+            {
+                GameObject value = (GameObject)field.GetValue(script);
+                if (value != null && value.name.Contains(\"Adam\"))
+                {
+                    bool isCorrect = value == currentAdam;
+                    string status = isCorrect ? \"[OK]\" : \"[NEEDS FIX]\";
+                    Debug.Log(status + \" \" + script.gameObject.name + \".\" + field.Name + \" -> \" + value.name);
+                }
+            }
+        }
+    }
+}

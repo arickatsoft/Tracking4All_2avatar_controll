@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 979cfba186894df7923b831ce031117e
+PluginImporter:
+  serializedVersion: 2
+  isPreloaded: 0
+  platformData:
+  - first:
+      Any:
+    second:
+      enabled: 0
+      settings: {}
+  - first:
+      Android: Android
+    second:
+      enabled: 1
+      settings:
+        CPU: ARM64
+  - first:
+      Editor: Editor
+    second:
+      enabled: 0
+      settings:
+        OS: AnyOS

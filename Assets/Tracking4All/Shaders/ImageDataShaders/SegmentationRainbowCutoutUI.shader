@@ -1,0 +1,68 @@
+Shader "Tracking4All/SegmentationCutoutUI"
+{
+    Properties
+    {
+        _MainTex ("Main Texture", 2D) = "" {}
+        _Threshold ("Threshold Value", Float) = 0.5
+        _Color ("Human Color", Color) = (1, 0, 0, 1)
+        _ResolutionX ("Camera Width", int) = 1920
+        _ResolutionY ("Camera Height", int) = 1080
+    }
+    SubShader
+    {
+        Tags { "RenderType" = "TransparentCutout" "Queue" = "Overlay" }
+        LOD 100
+
+        Pass
+        {
+            Blend SrcAlpha OneMinusSrcAlpha
+            ZWrite Off
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #include "UnityCG.cginc"
+
+            struct appdata_t
+            {
+                float4 vertex : POSITION;
+                float2 uv : TEXCOORD0;
+            };
+
+            struct v2f
+            {
+                float2 uv : TEXCOORD0;
+                float4 pos : SV_POSITION;
+            };
+
+            StructuredBuffer<float> _SegmentationBuffer;
+
+            float _Threshold;
+            float4 _Color;
+            int _ResolutionX;
+            int _ResolutionY;
+
+            v2f vert (appdata_t v)
+            {
+                v2f o;
+                o.pos = UnityObjectToClipPos(v.vertex);
+                o.uv = v.uv;
+                return o;
+            }
+
+            fixed4 frag (v2f i) : SV_Target
+            {
+                int index = int(i.uv.y * _ResolutionY) * _ResolutionX + int(i.uv.x * _ResolutionX);
+                float bufferValue = _SegmentationBuffer[index];
+
+                if (bufferValue < _Threshold)
+                {
+                    discard;
+                }
+
+                return _Color;
+            }
+            ENDCG
+        }
+    }
+    Fallback "UI/Default"
+}

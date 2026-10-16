@@ -1,0 +1,255 @@
+using UnityEngine;
+using System.Collections.Generic;
+using Tracking4All;
+
+namespace Tracking4All.Multiplayer
+{
+    /// <summary>
+    /// Network MediaPipe Provider - feeds received network MediaPipe data into Tracking4All
+    /// This is the missing piece that makes remote avatars move correctly
+    /// It acts as a "fake" MediaPipe source using network data instead of camera data
+    /// </summary>
+    public class NetworkMediaPipeProvider : MonoBehaviour
+    {
+        [Header("Network Data")]
+        [SerializeField] private bool hasNetworkData = false;
+        [SerializeField] private float dataTimeout = 2f;
+        
+        // Storage for received MediaPipe landmarks
+        private Dictionary<int, Landmark> currentLandmarks = new Dictionary<int, Landmark>();
+        private Dictionary<int, NormalizedLandmark> currentNormalizedLandmarks = new Dictionary<int, NormalizedLandmark>();
+        private float lastDataTime = 0f;
+        
+        void Start()
+        {
+            Debug.Log("🌐 NetworkMediaPipeProvider ready to receive MediaPipe data from network");
+        }
+        
+        void Update()
+        {
+            // Check for data timeout
+            if (hasNetworkData && Time.time - lastDataTime > dataTimeout)
+            {
+                hasNetworkData = false;
+                Debug.Log("⏰ Network MediaPipe data timed out");
+            }
+        }
+        
+        /// <summary>
+        /// Feed received MediaPipe landmarks into this provider
+        /// This makes them available to the Avatar system as if they came from local MediaPipe
+        /// </summary>
+        public void SetNetworkMediaPipeData(FixedPoseSyncManager.MediaPipeLandmark[] landmarks)
+        {
+            if (landmarks == null || landmarks.Length == 0) return;
+            
+            Debug.Log($"🌐 Receiving {landmarks.Length} MediaPipe landmarks from network");
+            
+            // Clear previous data
+            currentLandmarks.Clear();
+            currentNormalizedLandmarks.Clear();
+            
+            // Convert network MediaPipe data to Tracking4All format
+            foreach (var networkLandmark in landmarks)
+            {
+                // Create Tracking4All Landmark
+                var landmark = new Landmark
+                {
+                    position = networkLandmark.position,
+                    visibility = networkLandmark.visibility,
+                    presence = networkLandmark.presence
+                };
+                
+                currentLandmarks[networkLandmark.index] = landmark;
+                
+                // Create Tracking4All NormalizedLandmark if data available
+                if (networkLandmark.normalizedPosition != Vector3.zero)
+                {
+                    var normalizedLandmark = new NormalizedLandmark
+                    {
+                        position = networkLandmark.normalizedPosition
+                    };
+                    
+                    currentNormalizedLandmarks[networkLandmark.index] = normalizedLandmark;
+                }
+            }
+            
+            // Update provider state
+            hasNetworkData = true;
+            lastDataTime = Time.time;
+            
+            Debug.Log($"✅ Network MediaPipe data processed - {currentLandmarks.Count} landmarks available");
+            
+            // Now apply this data to the avatar
+            ApplyToAvatar();
+        }
+        
+        /// <summary>
+        /// Apply the network MediaPipe data to the avatar
+        /// This is where the magic happens - making the avatar move like the remote camera
+        /// </summary>
+        void ApplyToAvatar()
+        {
+            // Find the Avatar component that should use this network data
+            GameObject targetAvatar = FindTargetAvatar();
+            
+            if (targetAvatar != null)
+            {
+                var avatarComponent = targetAvatar.GetComponent<Tracking4All.Avatar>();
+                if (avatarComponent != null)
+                {
+                    Debug.Log($"🎯 Applying network MediaPipe data to {targetAvatar.name}");
+                    
+                    // TODO: THE CRITICAL PART - We need to create a custom pose provider
+                    // that feeds our network landmark data into the Avatar component
+                    // This would replace the normal camera/MediaPipe input
+                    
+                    // For now, log what we would do
+                    LogLandmarkApplication();
+                }
+                else
+                {
+                    Debug.LogWarning($"❌ No Avatar component found on {targetAvatar.name}");
+                }
+            }
+        }
+        
+        GameObject FindTargetAvatar()
+        {
+            // Determine which avatar should receive this network data based on multiplayer role
+            var avatarFix = FindObjectOfType<AvatarMovementFix>();
+            if (avatarFix != null)
+            {
+                // Use reflection to check the current mode
+                var fixType = typeof(AvatarMovementFix);
+                var isHostField = fixType.GetField("isHost", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                
+                if (isHostField != null)
+                {
+                    bool isHost = (bool)isHostField.GetValue(avatarFix);
+                    
+                    if (isHost)
+                    {
+                        // Host receives data for Bryce
+                        return GameObject.Find("Bryce");
+                    }
+                    else
+                    {
+                        // Client receives data for Remy
+                        return GameObject.Find("Remy");
+                    }
+                }
+            }
+            
+            return null;
+        }
+        
+        void LogLandmarkApplication()
+        {
+            Debug.Log("📋 NETWORK MEDIAPIPE DATA APPLICATION:");
+            Debug.Log($"   Total landmarks: {currentLandmarks.Count}");
+            
+            // Log key landmarks
+            var keyIndices = new Dictionary<int, string>
+            {
+                {0, "Nose"},
+                {11, "LeftShoulder"},
+                {12, "RightShoulder"}, 
+                {15, "LeftWrist"},
+                {16, "RightWrist"},
+                {23, "LeftHip"},
+                {24, "RightHip"},
+                {27, "LeftAnkle"},
+                {28, "RightAnkle"}
+            };
+            
+            foreach (var kvp in keyIndices)
+            {
+                if (currentLandmarks.ContainsKey(kvp.Key))
+                {
+                    var landmark = currentLandmarks[kvp.Key];
+                    Debug.Log($"   {kvp.Value}: {landmark.position} (vis: {landmark.visibility:F2})");
+                }
+            }
+            
+            Debug.Log("💡 Next step: Create custom IPoseJointProvider to feed this data to Avatar");
+        }
+        
+        /// <summary>
+        /// Get landmark by MediaPipe index (for custom provider)
+        /// </summary>
+        public Landmark GetLandmark(int index)
+        {
+            if (currentLandmarks.ContainsKey(index))
+            {
+                return currentLandmarks[index];
+            }
+            
+            return new Landmark(); // Return empty landmark if not found
+        }
+        
+        /// <summary>
+        /// Get normalized landmark by MediaPipe index (for custom provider)
+        /// </summary>
+        public NormalizedLandmark GetNormalizedLandmark(int index)
+        {
+            if (currentNormalizedLandmarks.ContainsKey(index))
+            {
+                return currentNormalizedLandmarks[index];
+            }
+            
+            return new NormalizedLandmark(); // Return empty if not found
+        }
+        
+        /// <summary>
+        /// Check if we have valid network data
+        /// </summary>
+        public bool HasValidData()
+        {
+            return hasNetworkData && currentLandmarks.Count > 0;
+        }
+        
+        /// <summary>
+        /// Test method to verify the provider works
+        /// </summary>
+        [ContextMenu("Test Network MediaPipe Provider")]
+        public void TestNetworkProvider()
+        {
+            Debug.Log("🧪 TESTING Network MediaPipe Provider");
+            
+            // Create sample MediaPipe data
+            var testLandmarks = new FixedPoseSyncManager.MediaPipeLandmark[]
+            {
+                new FixedPoseSyncManager.MediaPipeLandmark
+                {
+                    index = 0, // Nose
+                    position = new Vector3(0, 1.7f, 0),
+                    visibility = 1.0f,
+                    presence = 1.0f,
+                    normalizedPosition = new Vector3(0.5f, 0.7f, 0)
+                },
+                new FixedPoseSyncManager.MediaPipeLandmark
+                {
+                    index = 15, // Left wrist
+                    position = new Vector3(-0.5f, 1.2f, 0.3f),
+                    visibility = 0.9f,
+                    presence = 1.0f,
+                    normalizedPosition = new Vector3(0.3f, 0.6f, 0.3f)
+                },
+                new FixedPoseSyncManager.MediaPipeLandmark
+                {
+                    index = 16, // Right wrist
+                    position = new Vector3(0.5f, 1.2f, 0.3f),
+                    visibility = 0.9f,
+                    presence = 1.0f,
+                    normalizedPosition = new Vector3(0.7f, 0.6f, 0.3f)
+                }
+            };
+            
+            // Apply test data
+            SetNetworkMediaPipeData(testLandmarks);
+            
+            Debug.Log("✅ Network MediaPipe Provider test completed");
+        }
+    }
+}

@@ -1,0 +1,61 @@
+using System;
+using System.IO;
+using System.Text;
+using System.Reflection;
+using FitFight.Practice;
+using Tracking4All;
+using UnityEditor;
+using UnityEngine;
+
+public static class StrikeContactValidation
+{
+    private static readonly StringBuilder report=new StringBuilder();
+    private static int checks;
+    private static void Check(bool value,string label)
+    { if(!value)throw new Exception(label);checks++;report.AppendLine("PASS "+label); }
+    public static void Run()
+    {
+        report.Clear();checks=0;
+        try
+        {
+            Targets();CameraSettings();
+            report.AppendLine($"PASS {checks} strike-contact and capture-request checks; device startup and visual motion still require phone verification.");
+        }
+        catch(Exception e) { report.AppendLine("FAIL "+e);throw; }
+        finally { Directory.CreateDirectory("Logs/Practice");File.WriteAllText("Logs/Practice/strike-contact-validation.txt",report.ToString()); }
+    }
+    private static void Targets()
+    {
+        var surface=new Vector3(2,1,3);var facing=Vector3.forward;
+        var still=AssistedPunchController.LegContactTarget(surface,Vector3.zero,facing,true);
+        Check(Vector3.Distance(still,surface-facing*.035f)<.00001f,"Stationary bag retains the original contact inset");
+        var moving=AssistedPunchController.LegContactTarget(surface,new Vector3(.2f,0,.3f),facing,true);
+        Check((moving-still).z>0 && (moving-still).x>0,"Foot target leads the measured bag motion");
+        var fast=AssistedPunchController.LegContactTarget(surface,new Vector3(20,-30,40),facing,true);
+        Check(Mathf.Abs(Vector3.Distance(fast,still)-.10f)<.00001f,"Fast bag motion cannot move the captured goal more than ten centimeters");
+        Check(AssistedPunchController.LegContactTarget(surface,Vector3.one*20,facing,false)==still,"Knee goal keeps its existing stationary targeting");
+        Check(AssistedPunchController.LegContactTarget(surface,new Vector3(float.NaN,0,0),facing,true)==still,"Invalid bag velocity cannot poison the strike goal");
+    }
+    private static void CameraSettings()
+    {
+        // Inactive backend: exercise the actual FPS override/restoration without opening a camera.
+        var root=new GameObject("Capture request settings check");root.SetActive(false);
+        try
+        {
+            var backend=root.AddComponent<UnityWebCamBackend>();var fps=new FloatSetting();fps.Set(30);
+            typeof(UnityWebCamBackend).GetField("cameraSettings",BindingFlags.NonPublic|BindingFlags.Instance)
+                .SetValue(backend,new WebCamSettings{frameRate=fps});
+            Check(backend.ConfigureCapture(false,60) && backend.RequestedFrameRate==60,"Combined request applies sixty FPS");
+            Check(!backend.ConfigureCapture(false,60),"Identical capture request does not reopen the camera");
+            Check(backend.ConfigureCapture(false,30) && backend.RequestedFrameRate==30,"Engine can switch frame rate while retaining original preference");
+            Check(backend.ConfigureCapture(false,60) && backend.ConfigureCapture(false,null) && backend.RequestedFrameRate==30,"Baseline restoration returns to the original camera FPS");
+            Check(!backend.ConfigureCapture(false,null),"Repeated baseline restoration does not reopen capture");
+        }
+        finally { UnityEngine.Object.DestroyImmediate(root); }
+    }
+    public static void RunBatch()
+    {
+        try { Run();GameBodyValidation.Run();GameBodyReplayValidation.Run();SmoothGameBodyValidation.Run();BoxingPriorityValidation.Run();MediaPipeOctoberReplayValidation.Run();MediaPipeBoxingValidation.Run();EngineComparisonValidation.Run();FullBodyTestValidation.Run();EditorApplication.Exit(0); }
+        catch(Exception e) { Debug.LogException(e);EditorApplication.Exit(1); }
+    }
+}

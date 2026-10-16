@@ -1,0 +1,418 @@
+using UnityEngine;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
+using System.Collections.Generic;
+using System;
+using Tracking4All;
+
+namespace Tracking4All.Multiplayer
+{
+    /// <summary>
+    /// CORRECTED PoseSyncManager that captures RAW MediaPipe landmark data 
+    /// and feeds it back into the Tracking4All system properly
+    /// This fixes the avatar movement issue by working at the MediaPipe level
+    /// </summary>
+    public class FixedPoseSyncManager : MonoBehaviour
+    {
+        [Header("Sync Settings")]
+        [SerializeField] private int poseDataPort = 7778;
+        [SerializeField] private float sendRate = 30f;
+        
+        [Header("Tracking4All References")]
+        [SerializeField] private PoseSolution poseSolution; // This provides raw MediaPipe data
+        [SerializeField] private GameObject localAvatar;
+        [SerializeField] private GameObject remoteAvatar;
+        
+        // Network state
+        private bool isHost = false;
+        private bool isConnected = false;
+        private string remoteIP = "";
+        
+        // UDP communication
+        private UdpClient udpSender;
+        private UdpClient udpReceiver;
+        private Thread receiveThread;
+        private IPEndPoint remoteEndPoint;
+        
+        // Timing
+        private float lastSendTime = 0f;
+        private float sendInterval;
+        
+        // MediaPipe landmark data (CORRECT format for Tracking4All)
+        [System.Serializable]
+        public class MediaPipeLandmarkFrame
+        {
+            public string avatarName;
+            public float timestamp;
+            public MediaPipeLandmark[] landmarks; // Raw MediaPipe landmarks (33 for body pose)
+        }
+        
+        [System.Serializable]
+        public class MediaPipeLandmark
+        {
+            public int index; // MediaPipe landmark index (0-32 for body pose)
+            public Vector3 position; // 3D world position
+            public float visibility; // 0-1 visibility score
+            public float presence; // 0-1 presence score
+            public Vector3 normalizedPosition; // Screen space [0,1] coordinates
+        }
+        
+        void Start()
+        {
+            sendInterval = 1f / sendRate;
+            
+            // Find PoseSolution if not assigned
+            if (poseSolution == null)
+                poseSolution = FindObjectOfType<PoseSolution>();
+                
+            Debug.Log($"FixedPoseSyncManager initialized");
+            Debug.Log($"PoseSolution: {(poseSolution != null ? "✅ Found" : "❌ Missing")}");
+            
+            if (poseSolution == null)
+            {
+                Debug.LogError("❌ PoseSolution not found! Cannot capture MediaPipe data.");
+                Debug.LogError("💡 Make sure your scene has a PoseSolution component.");
+            }
+        }
+        
+        public void InitializeAsHost(GameObject localAvatarRemy, GameObject remoteAvatarBryce)
+        {
+            isHost = true;
+            localAvatar = localAvatarRemy;
+            remoteAvatar = remoteAvatarBryce;
+            
+            Debug.Log("🔧 FIXED PoseSync: HOST - Capturing REMY MediaPipe data, applying to BRYCE");
+            
+            StartUDPReceiver();
+        }
+        
+        public void InitializeAsClient(GameObject localAvatarBryce, GameObject remoteAvatarRemy, string hostIP)
+        {
+            isHost = false;
+            localAvatar = localAvatarBryce;
+            remoteAvatar = remoteAvatarRemy;
+            remoteIP = hostIP;
+            
+            Debug.Log($"🔧 FIXED PoseSync: CLIENT - Capturing BRYCE MediaPipe data, applying to REMY");
+            
+            StartUDPReceiver();
+            ConnectToHost(hostIP);
+        }
+        
+        void StartUDPReceiver()
+        {
+            try
+            {
+                udpReceiver = new UdpClient(poseDataPort);
+                receiveThread = new Thread(ReceivePoseData);
+                receiveThread.Start();
+                
+                Debug.Log($"📡 Fixed UDP receiver started on port {poseDataPort}");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to start UDP receiver: {e.Message}");
+            }
+        }
+        
+        void ConnectToHost(string hostIP)
+        {
+            try
+            {
+                remoteIP = hostIP;
+                remoteEndPoint = new IPEndPoint(IPAddress.Parse(hostIP), poseDataPort);
+                
+                udpSender = new UdpClient();
+                isConnected = true;
+                
+                Debug.Log($"📡 Connected to host at {hostIP}:{poseDataPort}");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to connect to host: {e.Message}");
+            }
+        }
+        
+        void Update()
+        {
+            if (!isConnected) return;
+            
+            // Send MediaPipe data at specified rate
+            if (Time.time - lastSendTime >= sendInterval)
+            {
+                SendMediaPipeData();
+                lastSendTime = Time.time;
+            }
+        }
+        
+        /// <summary>
+        /// Capture and send RAW MediaPipe landmark data (CORRECT method)
+        /// This is the data that should be transmitted over network
+        /// </summary>
+        void SendMediaPipeData()
+        {
+            if (poseSolution == null || udpSender == null) return;
+            
+            try
+            {
+                // Capture RAW MediaPipe landmarks from PoseSolution
+                var landmarkFrame = CaptureMediaPipeLandmarks();
+                
+                if (landmarkFrame != null && landmarkFrame.landmarks != null && landmarkFrame.landmarks.Length > 0)
+                {
+                    // Serialize and send
+                    string jsonData = JsonUtility.ToJson(landmarkFrame);
+                    byte[] data = Encoding.UTF8.GetBytes(jsonData);
+                    
+                    // Send to remote device
+                    if (isHost && !string.IsNullOrEmpty(remoteIP))
+                    {
+                        IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Parse(remoteIP), poseDataPort);
+                        udpSender.Send(data, data.Length, clientEndPoint);
+                    }
+                    else if (!isHost && remoteEndPoint != null)
+                    {
+                        udpSender.Send(data, data.Length, remoteEndPoint);
+                    }
+                    
+                    Debug.Log($"📤 FIXED DATA SENT: {landmarkFrame.avatarName} - {landmarkFrame.landmarks.Length} MediaPipe landmarks ({data.Length} bytes)");
+                }
+                else
+                {
+                    Debug.LogWarning("⚠️ No MediaPipe landmark data available to send");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to send MediaPipe data: {e.Message}");
+            }
+        }
+        
+        /// <summary>
+        /// Capture RAW MediaPipe landmarks from PoseSolution (CORRECT source)
+        /// This gives us the actual landmark positions before avatar processing
+        /// </summary>
+        MediaPipeLandmarkFrame CaptureMediaPipeLandmarks()
+        {
+            if (poseSolution == null) return null;
+            
+            try
+            {
+                var frame = new MediaPipeLandmarkFrame
+                {
+                    avatarName = localAvatar != null ? localAvatar.name.ToUpper() : "UNKNOWN",
+                    timestamp = Time.time,
+                    landmarks = new List<MediaPipeLandmark>().ToArray()
+                };
+                
+                var landmarkList = new List<MediaPipeLandmark>();
+                
+                // Extract MediaPipe landmarks (body pose has 33 landmarks: 0-32)
+                for (int i = 0; i < 33; i++)
+                {
+                    try
+                    {
+                        // Get landmark from PoseSolution (this is the RAW MediaPipe data)
+                        var landmark = poseSolution.Get(0, i); // group 0, landmark index i
+                        
+                        if (landmark.position != Vector3.zero) // Only send valid landmarks
+                        {
+                            var mediapipeLandmark = new MediaPipeLandmark
+                            {
+                                index = i,
+                                position = landmark.position,
+                                visibility = landmark.visibility,
+                                presence = landmark.presence
+                            };
+                            
+                            // Also get normalized coordinates if available
+                            try
+                            {
+                                var normalizedProvider = poseSolution as INormalizedLandmarkProvider<PoseLandmarks>;
+                                if (normalizedProvider != null)
+                                {
+                                    var normalizedLandmark = normalizedProvider.Get(0, i);
+                                    if (normalizedLandmark != null)
+                                    {
+                                        mediapipeLandmark.normalizedPosition = normalizedLandmark.position;
+                                    }
+                                }
+                            }
+                            catch
+                            {
+                                // Normalized data not available, that's ok
+                                mediapipeLandmark.normalizedPosition = Vector3.zero;
+                            }
+                            
+                            landmarkList.Add(mediapipeLandmark);
+                        }
+                    }
+                    catch
+                    {
+                        // Skip landmarks that can't be read
+                        continue;
+                    }
+                }
+                
+                frame.landmarks = landmarkList.ToArray();
+                
+                Debug.Log($"📸 Captured {frame.landmarks.Length} MediaPipe landmarks from {frame.avatarName}");
+                
+                return frame;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Error capturing MediaPipe landmarks: {e.Message}");
+                return null;
+            }
+        }
+        
+        void ReceivePoseData()
+        {
+            IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, poseDataPort);
+            
+            while (udpReceiver != null)
+            {
+                try
+                {
+                    byte[] data = udpReceiver.Receive(ref remoteEndPoint);
+                    string jsonData = Encoding.UTF8.GetString(data);
+                    
+                    var landmarkFrame = JsonUtility.FromJson<MediaPipeLandmarkFrame>(jsonData);
+                    
+                    if (landmarkFrame != null && landmarkFrame.landmarks != null)
+                    {
+                        // Store sender IP for response
+                        string senderIP = remoteEndPoint.Address.ToString();
+                        if (isHost && string.IsNullOrEmpty(remoteIP))
+                        {
+                            remoteIP = senderIP;
+                            
+                            if (udpSender == null)
+                            {
+                                udpSender = new UdpClient();
+                                isConnected = true;
+                            }
+                        }
+                        
+                        Debug.Log($"📥 FIXED DATA RECEIVED: {landmarkFrame.avatarName} - {landmarkFrame.landmarks.Length} MediaPipe landmarks from {senderIP}");
+                        
+                        // Apply the MediaPipe data correctly
+                        ApplyMediaPipeLandmarks(landmarkFrame);
+                    }
+                }
+                catch (Exception e)
+                {
+                    if (udpReceiver != null)
+                    {
+                        Debug.LogError($"Receive MediaPipe data error: {e.Message}");
+                    }
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Apply received MediaPipe landmarks to the remote avatar
+        /// THIS IS THE KEY FIX - feeding data back into Tracking4All correctly
+        /// </summary>
+        void ApplyMediaPipeLandmarks(MediaPipeLandmarkFrame frame)
+        {
+            if (frame == null || frame.landmarks == null) return;
+            
+            Debug.Log($"🎯 APPLYING MediaPipe landmarks to remote avatar:");
+            Debug.Log($"   Source: {frame.avatarName}");
+            Debug.Log($"   Landmarks: {frame.landmarks.Length}");
+            Debug.Log($"   Target: {(remoteAvatar != null ? remoteAvatar.name : "null")}");
+            
+            // TODO: THIS IS WHERE THE REAL FIX NEEDS TO HAPPEN
+            // We need to feed the received MediaPipe landmarks back into the Tracking4All system
+            // as if they came from the camera/MediaPipe detection on this device
+            
+            // The correct approach would be to:
+            // 1. Create a custom joint provider that uses the received landmark data
+            // 2. Feed this provider into the Avatar component 
+            // 3. Let Tracking4All process the landmarks naturally
+            
+            Debug.Log("💡 NEXT STEP: Need to create custom provider to feed MediaPipe data into Avatar");
+            Debug.Log("💡 This will make the remote avatar move exactly like the local camera input");
+            
+            // For now, log the key landmarks we received
+            LogKeyLandmarks(frame.landmarks);
+        }
+        
+        void LogKeyLandmarks(MediaPipeLandmark[] landmarks)
+        {
+            // Log key landmarks for debugging
+            var keyIndices = new Dictionary<int, string>
+            {
+                {0, "Nose"},
+                {15, "LeftWrist"},
+                {16, "RightWrist"},
+                {27, "LeftAnkle"},
+                {28, "RightAnkle"}
+            };
+            
+            Debug.Log("🔍 KEY RECEIVED LANDMARKS:");
+            foreach (var landmark in landmarks)
+            {
+                if (keyIndices.ContainsKey(landmark.index))
+                {
+                    Debug.Log($"   {keyIndices[landmark.index]}: {landmark.position} (vis: {landmark.visibility:F2})");
+                }
+            }
+        }
+        
+        public void OnPlayerConnected(string playerIP)
+        {
+            remoteIP = playerIP;
+            
+            if (udpSender == null)
+            {
+                udpSender = new UdpClient();
+            }
+            
+            isConnected = true;
+            Debug.Log($"📡 Fixed PoseSync: Player connected from {playerIP}");
+        }
+        
+        public void Disconnect()
+        {
+            isConnected = false;
+            
+            if (receiveThread != null)
+            {
+                receiveThread.Abort();
+                receiveThread = null;
+            }
+            
+            if (udpReceiver != null)
+            {
+                udpReceiver.Close();
+                udpReceiver = null;
+            }
+            
+            if (udpSender != null)
+            {
+                udpSender.Close();
+                udpSender = null;
+            }
+            
+            Debug.Log("📡 Fixed PoseSync: Disconnected");
+        }
+        
+        void OnDestroy()
+        {
+            Disconnect();
+        }
+        
+        void OnApplicationPause(bool pauseStatus)
+        {
+            if (pauseStatus)
+            {
+                Disconnect();
+            }
+        }
+    }
+}
