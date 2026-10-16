@@ -1,0 +1,3 @@
+[submodule "NativePose/sdk/libyuv"]
+	path = NativePose/sdk/libyuv
+	url = https://chromium.googlesource.com/libyuv/libyuv
